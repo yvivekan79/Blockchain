@@ -13,6 +13,7 @@ Complete documentation for the LSCC (Layered Sharding with Cross-Channel Consens
 | [API_REFERENCE.md](./API_REFERENCE.md) | Complete REST API and WebSocket documentation |
 | [PERFORMANCE_GUIDE.md](./PERFORMANCE_GUIDE.md) | Performance metrics and optimization |
 | [ARCHITECTURE_REFERENCES.md](./ARCHITECTURE_REFERENCES.md) | PoW, PoS, PBFT, LSCC algorithm comparisons |
+| [CONSENSUS_COMPARISON.md](./CONSENSUS_COMPARISON.md) | Bitcoin PoW vs LSCC detailed comparison |
 | [RESEARCH_PAPER.md](./RESEARCH_PAPER.md) | Academic research paper with analysis |
 
 ## Quick Start
@@ -22,6 +23,7 @@ Complete documentation for the LSCC (Layered Sharding with Cross-Channel Consens
 3. **Contributing code?** See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)
 4. **Using the APIs?** Check [API_REFERENCE.md](./API_REFERENCE.md)
 5. **Understanding consensus?** Read [ARCHITECTURE_REFERENCES.md](./ARCHITECTURE_REFERENCES.md)
+6. **Comparing Bitcoin PoW vs LSCC?** See [CONSENSUS_COMPARISON.md](./CONSENSUS_COMPARISON.md)
 
 ## Key Specifications
 
