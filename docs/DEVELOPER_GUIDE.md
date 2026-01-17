@@ -182,7 +182,7 @@ blockchain:
 network:
   p2p_port: 9000
   bootstrap_nodes:
-    - "192.168.50.147:9001"
+    - "192.168.50.147:9000"
 ```
 
 ---
@@ -512,10 +512,10 @@ GET /api/v1/network/peers
   },
   "peers": [
     {
-      "id": "peer-192.168.50.147:9001-pow",
+      "id": "peer-192.168.50.147:9000-lscc",
       "address": "192.168.50.147",
-      "port": 9001,
-      "consensus_algorithm": "pow",
+      "port": 9000,
+      "consensus_algorithm": "lscc",
       "role": "validator",
       "status": "connected",
       "last_seen": "2026-01-17T10:30:00Z",

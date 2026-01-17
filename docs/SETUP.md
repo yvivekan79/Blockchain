@@ -153,7 +153,7 @@ EXAMPLES:
   ./lscc-blockchain --config=custom.yaml              # Start with custom config
   ./lscc-blockchain --version                         # Show version
 CONSENSUS ALGORITHMS:
-  • LSCC (Layered Sharding with Cross-Channel Consensus) - 300+ TPS
+  • LSCC (Layered Sharding with Cross-Channel Consensus) - 350-400 TPS
   • PoW (Proof of Work) - Traditional Bitcoin-style consensus
   • PoS (Proof of Stake) - Energy-efficient consensus
   • PBFT (Practical Byzantine Fault Tolerance) - Enterprise consensus
