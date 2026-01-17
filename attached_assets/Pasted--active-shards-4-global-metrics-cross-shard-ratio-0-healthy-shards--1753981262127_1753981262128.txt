@@ -1,0 +1,100 @@
+{
+  "active_shards": 4,
+  "global_metrics": {
+    "cross_shard_ratio": 0,
+    "healthy_shards": 4,
+    "load_balance": 1,
+    "total_tps": 0,
+    "total_tx_count": 0
+  },
+  "inactive_shards": 0,
+  "shards": [
+    {
+      "channels": [0, 1],
+      "health_ratio": 1,
+      "layer_id": 0,
+      "load_percentage": 0,
+      "name": "shard-0-layer-0",
+      "performance": {
+        "block_height": 0,
+        "latency_ms": 50000,
+        "tps": 0,
+        "validator_count": 3
+      },
+      "shard_id": 0,
+      "status": "active",
+      "transaction_count": 0,
+      "validators": [
+        "validator-0-0",
+        "validator-0-1",
+        "validator-0-2"
+      ]
+    },
+    {
+      "channels": [1, 0],
+      "health_ratio": 1,
+      "layer_id": 1,
+      "load_percentage": 0,
+      "name": "shard-1-layer-1",
+      "performance": {
+        "block_height": 0,
+        "latency_ms": 60000,
+        "tps": 0,
+        "validator_count": 3
+      },
+      "shard_id": 1,
+      "status": "active",
+      "transaction_count": 0,
+      "validators": [
+        "validator-1-0",
+        "validator-1-1",
+        "validator-1-2"
+      ]
+    },
+    {
+      "channels": [0, 1],
+      "health_ratio": 1,
+      "layer_id": 2,
+      "load_percentage": 0,
+      "name": "shard-2-layer-2",
+      "performance": {
+        "block_height": 0,
+        "latency_ms": 60000,
+        "tps": 0,
+        "validator_count": 3
+      },
+      "shard_id": 2,
+      "status": "active",
+      "transaction_count": 0,
+      "validators": [
+        "validator-2-0",
+        "validator-2-1",
+        "validator-2-2"
+      ]
+    },
+    {
+      "channels": [1, 0],
+      "health_ratio": 1,
+      "layer_id": 0,
+      "load_percentage": 0,
+      "name": "shard-3-layer-0",
+      "performance": {
+        "block_height": 0,
+        "latency_ms": 60000,
+        "tps": 0,
+        "validator_count": 3
+      },
+      "shard_id": 3,
+      "status": "active",
+      "transaction_count": 0,
+      "validators": [
+        "validator-3-0",
+        "validator-3-1",
+        "validator-3-2"
+      ]
+    }
+  ],
+  "syncing_shards": 0,
+  "timestamp": "2025-07-31T17:00:55.312219184Z",
+  "total_shards": 4
+}

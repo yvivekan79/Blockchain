@@ -1,0 +1,142 @@
+# LSCC Multi-Protocol Multi-Server Blockchain Configuration
+
+# Node Configuration - Default Template (Override with specific node configs)
+node:
+  id: "multi-protocol-node-001"
+  name: "Multi-Protocol Blockchain Node"
+  description: "Distributed Multi-Protocol Multi-Server Consensus Network"
+  consensus_algorithm: "lscc" # This gets overridden per server
+  role: "validator" # bootstrap, validator, observer
+  external_ip: "" # Auto-detect if empty
+  region: "multi-region"
+  multi_protocol_enabled: true
+  multi_server_enabled: true
+
+# Server Configuration  
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "development" # development, production
+
+# Consensus Configuration
+consensus:
+  algorithm: "lscc" # pow, pos, pbft, ppbft, lscc
+  difficulty: 4
+  block_time: 1 # Much faster blocks for high TPS (1 second)
+  min_stake: 1000
+  stake_ratio: 0.1
+  view_timeout: 5 # Reduced timeout for faster consensus
+  byzantine: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 200000000  # High limit for large transaction batches
+
+# Sharding Configuration
+sharding:
+  num_shards: 4
+  shard_size: 100
+  cross_shard_delay: 100 # milliseconds
+  rebalance_threshold: 0.7
+  layered_structure: true
+
+# Network Configuration - Multi-Server Support
+network:
+  port: 9000
+  max_peers: 100 # Increased for multi-server support
+  seeds: 
+    - "192.168.50.147:9001" # Bootstrap PoW
+    - "192.168.50.148:9002" # Validator PoS
+    - "192.168.50.149:9003" # Validator PBFT
+    - "192.168.50.150:9004" # Validator LSCC
+  boot_nodes:
+    - "192.168.50.147:5001" # PoW Bootstrap API
+    - "192.168.50.148:5002" # PoS Validator API
+    - "192.168.50.149:5003" # PBFT Validator API
+    - "192.168.50.150:5004" # LSCC Validator API
+  timeout: 30 # seconds
+  keep_alive: 60 # seconds
+  external_ip: "" # Auto-detect per server
+  bind_address: "0.0.0.0"
+  encryption: true # Enable for multi-server security
+  auth_required: true # Enable for multi-server authentication
+  multi_server_discovery: true
+  cross_protocol_communication: true
+  
+# Bootstrap Configuration - Multi-Server Network
+bootstrap:
+  enabled: true # Enable for multi-server coordination
+  advertise_address: "" # Auto-detect per server
+  multi_protocol_coordinator: true
+  cross_server_sync: true
+  protocol_discovery:
+    pow_nodes: ["192.168.50.147:5001", "192.168.50.148:5001", "192.168.50.149:5001", "192.168.50.150:5001"]
+    pos_nodes: ["192.168.50.147:5002", "192.168.50.148:5002", "192.168.50.149:5002", "192.168.50.150:5002"]
+    pbft_nodes: ["192.168.50.147:5003", "192.168.50.148:5003", "192.168.50.149:5003", "192.168.50.150:5003"]
+    lscc_nodes: ["192.168.50.147:5004", "192.168.50.148:5004", "192.168.50.149:5004", "192.168.50.150:5004"]
+
+# Storage Configuration
+storage:
+  data_dir: "./data"
+  cache_size: 100 # MB
+  compact: true
+  encryption: false
+
+# Security Configuration
+security:
+  jwt_secret: "change-this-in-production"
+  tls_enabled: false
+  cert_file: ""
+  key_file: ""
+  rate_limit: 100 # requests per minute
+  max_connections: 1000
+
+# Multi-Protocol Configuration
+multi_protocol:
+  enabled: true
+  protocols: ["pow", "pos", "pbft", "lscc"]
+  cross_protocol_consensus: true
+  protocol_weights:
+    pow: 0.2   # 20% weight
+    pos: 0.25  # 25% weight  
+    pbft: 0.25 # 25% weight
+    lscc: 0.3  # 30% weight (primary)
+  failover_enabled: true
+  load_balancing: true
+
+# Multi-Server Configuration
+multi_server:
+  enabled: true
+  server_topology:
+    - server: "192.168.50.147"
+      primary_protocol: "pow"
+      role: "bootstrap"
+      api_port: 5001
+      p2p_port: 9001
+    - server: "192.168.50.148" 
+      primary_protocol: "pos"
+      role: "validator"
+      api_port: 5002
+      p2p_port: 9002
+    - server: "192.168.50.149"
+      primary_protocol: "pbft"
+      role: "validator"
+      api_port: 5003
+      p2p_port: 9003
+    - server: "192.168.50.150"
+      primary_protocol: "lscc"
+      role: "validator"
+      api_port: 5004
+      p2p_port: 9004
+  sync_interval: 1000 # milliseconds
+  health_check_interval: 5000 # milliseconds
+  consensus_threshold: 0.67 # 67% agreement required
+
+# Logging Configuration
+logging:
+  level: "info" # debug, info, warn, error
+  format: "json" # json, text
+  output: "stdout" # stdout, file
+  max_size: 100 # MB
+  max_backups: 3
+  max_age: 28 # days
+  compress: true

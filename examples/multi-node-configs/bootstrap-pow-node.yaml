@@ -1,0 +1,89 @@
+# Bootstrap PoW Node Configuration
+# This is the first node in the network that other nodes connect to
+
+# Application Configuration
+app:
+  name: "LSCC Blockchain"
+  version: "1.0.0"
+  environment: "production"
+
+# Node Configuration
+node:
+  id: "bootstrap-pow-1"
+  name: "Bootstrap PoW Node"
+  description: "Bootstrap node running Proof of Work consensus"
+  consensus_algorithm: "pow"
+  role: "bootstrap"
+  external_ip: "YOUR_EXTERNAL_IP"  # Replace with actual external IP
+  region: "us-east-1"
+
+# Server Configuration
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "production"
+
+# Consensus Configuration
+consensus:
+  algorithm: "pow"
+  difficulty: 4
+  block_time: 10  # 10 second blocks for PoW
+  min_stake: 1000
+  stake_ratio: 0.1
+  view_timeout: 30
+  byzantine: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 10000000  # Lower gas limit for PoW
+
+# Sharding Configuration
+sharding:
+  num_shards: 2
+  shard_size: 50
+  cross_shard_delay: 200
+  rebalance_threshold: 0.8
+  layered_structure: false  # Simpler structure for PoW
+
+# Network Configuration
+network:
+  port: 9000
+  max_peers: 20
+  seeds: []  # Bootstrap node has no seeds
+  boot_nodes: []  # Bootstrap node has no boot nodes
+  timeout: 30
+  keep_alive: 60
+  external_ip: "YOUR_EXTERNAL_IP"  # Replace with actual external IP
+  bind_address: "0.0.0.0"
+  encryption: false
+  auth_required: false
+
+# Bootstrap Configuration
+bootstrap:
+  enabled: true
+  advertise_address: "YOUR_EXTERNAL_IP:9000"  # Replace with actual external IP
+
+# Storage Configuration
+storage:
+  data_dir: "./data-bootstrap-pow"
+  cache_size: 100
+  compact: true
+  encryption: false
+
+# Security Configuration
+security:
+  jwt_secret: "bootstrap-pow-secret-change-in-production"
+  tls_enabled: false
+  cert_file: ""
+  key_file: ""
+  rate_limit: 100
+  max_connections: 500
+
+# Logging Configuration
+logging:
+  level: "info"
+  format: "json"
+  output: "stdout"
+  max_size: 100
+  max_backups: 3
+  max_age: 28
+  compress: true

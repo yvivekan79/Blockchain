@@ -1,0 +1,27 @@
+# Database files - exclude large blockchain data
+data/
+*.vlog
+*.sst
+*.log
+
+# Build artifacts
+lscc-blockchain
+lscc-poc
+*.tar.gz
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Go specific
+vendor/
+.git.backup.*

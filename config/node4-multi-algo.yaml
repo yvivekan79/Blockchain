@@ -1,0 +1,159 @@
+# Node 4 Configuration - Multi-Algorithm Support  
+# Host: 192.168.50.150
+# Auto-generated network configuration
+
+node:
+  id: "node4-multi-algo"
+  name: "Node 4 Multi-Algorithm"
+  description: "Multi-algorithm node running PoW, PoS, PBFT, LSCC"
+  consensus_algorithm: "lscc"
+  role: "validator"
+  external_ip: "192.168.50.150"
+  region: "cluster-east"
+
+# Algorithm-specific server configurations
+servers:
+  pow:
+    port: 5001
+    host: "0.0.0.0"
+    mode: "production"
+    algorithm: "pow"
+    peers:
+      - "192.168.50.147:5001"
+      - "192.168.50.148:5001"
+      - "192.168.50.149:5001"
+      - "192.168.50.150:5001"
+  pos:
+    port: 5002
+    host: "0.0.0.0"
+    mode: "production"
+    algorithm: "pos"
+    peers:
+      - "192.168.50.147:5002"
+      - "192.168.50.148:5002"
+      - "192.168.50.149:5002"
+      - "192.168.50.150:5002"
+  pbft:
+    port: 5003
+    host: "0.0.0.0"
+    mode: "production"
+    algorithm: "pbft"
+    peers:
+      - "192.168.50.147:5003"
+      - "192.168.50.148:5003"
+      - "192.168.50.149:5003"
+      - "192.168.50.150:5003"
+  lscc:
+    port: 5004
+    host: "0.0.0.0"
+    mode: "production"
+    algorithm: "lscc"
+    peers:
+      - "192.168.50.147:5004"
+      - "192.168.50.148:5004"
+      - "192.168.50.149:5004"
+      - "192.168.50.150:5004"
+
+# Primary server configuration (specializes in LSCC)
+server:
+  port: 5004
+  host: "0.0.0.0"
+  mode: "production"
+
+# Consensus configuration
+consensus:
+  algorithm: "lscc"
+  difficulty: 4
+  block_time: 1
+  min_stake: 1000
+  stake_ratio: 0.1
+  view_timeout: 5
+  byzantine: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 200000000
+
+# Sharding configuration
+sharding:
+  num_shards: 4
+  shard_size: 100
+  cross_shard_delay: 100
+  rebalance_threshold: 0.7
+  layered_structure: true
+
+# Network configuration with distributed peer discovery
+network:
+  port: 9000
+  max_peers: 50
+  seeds:
+    - "192.168.50.147:9000"
+    - "192.168.50.148:9000"
+    - "192.168.50.149:9000"
+  boot_nodes:
+    - "192.168.50.147:9000"  # Bootstrap node
+  timeout: 30
+  keep_alive: 60
+  external_ip: "192.168.50.150"
+  bind_address: "0.0.0.0"
+  encryption: false
+  auth_required: false
+
+# Multi-algorithm P2P network ports
+network_ports:
+  pow: 9001
+  pos: 9002
+  pbft: 9003
+  lscc: 9004
+
+# Cross-algorithm peer discovery
+algorithm_peers:
+  pow:
+    - "192.168.50.147:9001"
+    - "192.168.50.148:9001"
+    - "192.168.50.149:9001"
+    - "192.168.50.150:9001"
+  pos:
+    - "192.168.50.147:9002"
+    - "192.168.50.148:9002"
+    - "192.168.50.149:9002"
+    - "192.168.50.150:9002"
+  pbft:
+    - "192.168.50.147:9003"
+    - "192.168.50.148:9003"
+    - "192.168.50.149:9003"
+    - "192.168.50.150:9003"
+  lscc:
+    - "192.168.50.147:9004"
+    - "192.168.50.148:9004"
+    - "192.168.50.149:9004"
+    - "192.168.50.150:9004"
+
+# Bootstrap configuration
+bootstrap:
+  enabled: false
+  advertise_address: "192.168.50.150:9000"
+
+# Storage configuration
+storage:
+  data_dir: "./data-node4"
+  cache_size: 200
+  compact: true
+  encryption: false
+
+# Security configuration
+security:
+  jwt_secret: "node4-multi-algo-secret-2025"
+  
+# Cross-consensus configuration for distributed deployment
+cross_consensus:
+  enabled: true
+  threshold: 0.67  # 67% agreement for cross-protocol consensus
+  algorithm_weights:
+    lscc: 0.30
+    pos: 0.25
+    pbft: 0.25
+    pow: 0.20
+  failover:
+    enabled: true
+    timeout: 10
+    max_retries: 3
