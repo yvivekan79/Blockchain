@@ -3,8 +3,7 @@
 ## 📁 Organized Documentation Structure
 
 ### 🔬 Research Papers (`research/`)
-- **LSCC_RESEARCH_PAPER.md** - Core research paper with academic analysis
-- **LSCC_COMPREHENSIVE_RESEARCH_PAPER.md** - Enhanced comprehensive research with latest findings
+- **LSCC_RESEARCH_PAPER.md** - Core research paper with academic analysis and performance validation
 
 ### 🎓 Academic Materials (`academic/`)
 - **ACADEMIC_TESTING_FRAMEWORK.md** - Peer-review validation framework
@@ -16,16 +15,12 @@
 
 ### 🚀 Operations & Deployment (`operations/`)
 - **PERFORMANCE_AND_DEPLOYMENT_GUIDE.md** - Performance optimization and deployment
-- **DISTRIBUTED_DEPLOYMENT_VERIFICATION.md** - Distributed system validation
-- **DISTRIBUTED_PROOF_SUMMARY.md** - Distributed testing results summary
 
 ### 📋 Setup Instructions (`setup/`)
 - **SETUP_INSTRUCTIONS.md** - Installation and configuration guide
 
 ### 📖 Implementation Guides (`guides/`)
-- **MULTI_ALGORITHM_CLUSTER_GUIDE.md** - Multi-algorithm cluster setup
-- **MULTI_ALGORITHM_DEPLOYMENT_GUIDE.md** - Multi-algorithm deployment procedures
-- **MULTI_NODE_DEPLOYMENT_GUIDE.md** - Multi-node network deployment
+- **MULTI_NODE_DEPLOYMENT_GUIDE.md** - 4-node distributed cluster deployment
 
 ### 📚 Root Documentation
 - **ARCHITECTURE_REFERENCES.md** - PoW, PoS, PBFT, LSCC algorithm references with industry comparisons

@@ -9,16 +9,11 @@ This project includes comprehensive documentation designed for different audienc
 
 ## 🔬 Research Papers (`research/`)
 
-**Core Research**: [research/LSCC_RESEARCH_PAPER.md](./research/LSCC_RESEARCH_PAPER.md)
-- Foundational academic paper with mathematical analysis and performance validation
-- Performance benchmarks and experimental results
+**LSCC Research Paper**: [research/LSCC_RESEARCH_PAPER.md](./research/LSCC_RESEARCH_PAPER.md)
+- Academic paper with mathematical analysis and performance validation
+- Performance benchmarks (350-400 TPS measured) and experimental results
 - Security analysis and Byzantine fault tolerance proofs
-
-**Comprehensive Research**: [research/LSCC_COMPREHENSIVE_RESEARCH_PAPER.md](./research/LSCC_COMPREHENSIVE_RESEARCH_PAPER.md)
-- Enhanced research paper with latest findings and comparisons
-- Comparative analysis against contemporary consensus algorithms
-- Mathematical complexity proofs and superiority analysis
-- Integration with current blockchain research
+- Comparative analysis against PoW, PoS, and PBFT
 
 ## 🎓 Academic Materials (`academic/`)
 
@@ -56,18 +51,6 @@ This project includes comprehensive documentation designed for different audienc
 - Resource requirements and scaling guidelines
 - Production deployment best practices
 
-**Distributed Verification**: [operations/DISTRIBUTED_DEPLOYMENT_VERIFICATION.md](./operations/DISTRIBUTED_DEPLOYMENT_VERIFICATION.md)
-- Multi-host deployment verification procedures
-- Network connectivity and peer discovery testing
-- Cross-algorithm communication validation
-- System health monitoring and alerting
-
-**Distributed Testing Summary**: [operations/DISTRIBUTED_PROOF_SUMMARY.md](./operations/DISTRIBUTED_PROOF_SUMMARY.md)
-- Comprehensive distributed testing results
-- Multi-region performance analysis
-- Cross-shard efficiency validation
-- Network resilience testing outcomes
-
 ## 📋 Setup Instructions (`setup/`)
 
 **Installation Guide**: [setup/SETUP_INSTRUCTIONS.md](./setup/SETUP_INSTRUCTIONS.md)
@@ -78,21 +61,9 @@ This project includes comprehensive documentation designed for different audienc
 
 ## 📖 Implementation Guides (`guides/`)
 
-**Multi-Algorithm Cluster**: [guides/MULTI_ALGORITHM_CLUSTER_GUIDE.md](./guides/MULTI_ALGORITHM_CLUSTER_GUIDE.md)
-- 4-node cluster configuration with different consensus algorithms
-- Cross-protocol transaction handling and synchronization
-- Performance optimization and resource allocation
-- Monitoring and troubleshooting cluster operations
-
-**Multi-Algorithm Deployment**: [guides/MULTI_ALGORITHM_DEPLOYMENT_GUIDE.md](./guides/MULTI_ALGORITHM_DEPLOYMENT_GUIDE.md)
-- Deploy PoW, PoS, PBFT, and LSCC nodes simultaneously
-- Cross-algorithm communication and coordination
-- Load balancing and failover strategies
-- Production monitoring and maintenance
-
-**Multi-Node Setup**: [guides/MULTI_NODE_DEPLOYMENT_GUIDE.md](./guides/MULTI_NODE_DEPLOYMENT_GUIDE.md)
-- Distributed deployment across multiple hosts
-- Geographic distribution and latency optimization
+**Multi-Node Deployment**: [guides/MULTI_NODE_DEPLOYMENT_GUIDE.md](./guides/MULTI_NODE_DEPLOYMENT_GUIDE.md)
+- 4-node distributed deployment across multiple hosts
+- Single-protocol cluster configuration (LSCC, PoW, PoS, or PBFT)
 - Network security and firewall configuration
 - Automated deployment scripts and systemd services
 
