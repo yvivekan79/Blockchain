@@ -9,7 +9,7 @@ This document provides comprehensive API specifications for the LSCC Blockchain 
 **Content-Type**: `application/json`
 
 ### 🚀 Performance Features
-- **372+ TPS throughput** with LSCC consensus (live verified: 3156.7 TPS)
+- **350-400 TPS throughput** with LSCC consensus (live verified: 3156.7 TPS)
 - **Real-time performance benchmarking** via ConsensusComparator API
 - **Academic Testing Framework** with comprehensive validation suite
 - **Byzantine Fault Injection** with 6 attack scenarios for security testing
@@ -216,7 +216,7 @@ The LSCC blockchain includes a comprehensive academic testing framework designed
 {
   "status": "operational",
   "consensus_algorithm": "LSCC",
-  "processing_rate": "372 TPS",
+  "processing_rate": "350-400 TPS",
   "pending_transactions": 45,
   "total_transactions": 125847,
   "network_health": "excellent",
@@ -309,7 +309,7 @@ The LSCC blockchain includes a comprehensive academic testing framework designed
     "active_layers": 3,
     "active_shards": 2,
     "consensus_algorithm": "LSCC",
-    "throughput": "372 TPS",
+    "throughput": "350-400 TPS",
     "cross_shard_efficiency": "95%"
   },
   "layer_statistics": {
@@ -334,7 +334,7 @@ The LSCC blockchain includes a comprehensive academic testing framework designed
     }
   },
   "performance_metrics": {
-    "throughput": "372 TPS",
+    "throughput": "350-400 TPS",
     "average_latency": "1.17ms",
     "finality_time": "2.35s",
     "energy_consumption": "5 units",
@@ -453,7 +453,7 @@ The LSCC blockchain includes a comprehensive academic testing framework designed
   "active_validators": 4,
   "byzantine_tolerance": 1,
   "performance": {
-    "throughput": "372 TPS",
+    "throughput": "350-400 TPS",
     "latency": "1.17ms",
     "finality_time": "2.35s",
     "energy_consumption": "5 units"

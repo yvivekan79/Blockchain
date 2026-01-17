@@ -1,4 +1,3 @@
-
 # LSCC Blockchain Documentation
 
 ## 📁 Organized Documentation Structure
@@ -29,12 +28,17 @@
 - **MULTI_NODE_DEPLOYMENT_GUIDE.md** - Multi-node network deployment
 
 ### 📚 Root Documentation
+- **ARCHITECTURE_REFERENCES.md** - PoW, PoS, PBFT, LSCC algorithm references with industry comparisons
+- **DEVELOPER_GUIDE.md** - Complete developer onboarding guide
 - **DOCUMENTATION_INDEX.md** - Complete documentation navigation index
 - **PROJECT_CONTEXT.md** - Project background and development history
+- **system_architecture_research_content.md** - Detailed research content
+- **USER_GUIDE.md** - End-user deployment and operations guide
 
 ## Quick Navigation
 
 - **For Researchers**: Start with `research/` and `academic/`
-- **For Developers**: Begin with `technical/` and `setup/`
-- **For Operations**: Focus on `operations/` and `guides/`
+- **For Developers**: Begin with `DEVELOPER_GUIDE.md`, `technical/` and `setup/`
+- **For Operations**: Focus on `USER_GUIDE.md`, `operations/` and `guides/`
 - **For New Users**: Start with `setup/` and `DOCUMENTATION_INDEX.md`
+- **For Algorithm Understanding**: Read `ARCHITECTURE_REFERENCES.md`

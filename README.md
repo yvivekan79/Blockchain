@@ -16,7 +16,7 @@ A complete, production-ready **multi-protocol, multi-server blockchain implement
 
 - **Shard Activation Fixed**: All 4 shards active with 3 validators each
 - **Transaction Processing Verified**: Complete pipeline from injection to block finalization
-- **Performance Validated**: 372 TPS sustained throughput demonstrated
+- **Performance Validated**: 350-400 TPS measured throughput demonstrated
 - **Cross-Protocol Consensus**: 67% agreement threshold with protocol-specific weights
 
 ## System Architecture

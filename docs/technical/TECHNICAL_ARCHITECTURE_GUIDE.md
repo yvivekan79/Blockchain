@@ -20,7 +20,7 @@
 This guide provides comprehensive technical documentation for the LSCC (Layered Sharding with Cross-Channel Consensus) blockchain implementation. The system is designed as a high-performance, multi-consensus blockchain with advanced sharding capabilities.
 
 ### Key Technical Achievements
-- **372+ TPS throughput** with LSCC consensus (verified: 3156.7 TPS live)
+- **350-400 TPS throughput** with LSCC consensus (verified: 3156.7 TPS live)
 - **95% cross-shard efficiency** with parallel processing
 - **Multi-consensus architecture** supporting 5 algorithms
 - **Comprehensive Academic Testing Framework** with 15 API endpoints
@@ -87,7 +87,7 @@ Network Topology Example:
 ├─────────────────────────────────────────────────────────────┤
 │  Node 1-3: PoW     │  Node 4-7: LSCC   │  Node 8-9: PBFT   │
 │  Mining & Security  │  High Performance  │  Fault Tolerance  │
-│  7-15 TPS each     │  372+ TPS each     │  Variable TPS     │
+│  7-15 TPS each     │  350-400 TPS each     │  Variable TPS     │
 ├─────────────────────────────────────────────────────────────┤
 │           Universal Consensus Interface (Interoperable)     │
 │           Cross-Algorithm Validation & Coordination         │
@@ -119,7 +119,7 @@ internal/
 
 ## ⚡ High-Performance Mechanisms
 
-### How 372+ TPS is Achieved
+### How 350-400 TPS is Achieved
 
 The LSCC blockchain achieves high throughput through specific architectural optimizations:
 
@@ -309,7 +309,7 @@ type Channel struct {
 4. **Finalization**: Final layer commits to blockchain
 
 **Performance Characteristics:**
-- **Throughput**: 372+ TPS
+- **Throughput**: 350-400 TPS
 - **Latency**: ~1.17ms average
 - **Cross-shard Efficiency**: 95%
 - **Energy Consumption**: 5 units

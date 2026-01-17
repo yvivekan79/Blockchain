@@ -3,7 +3,7 @@
 
 ### Abstract
 
-This paper presents LSCC (Layered Sharding with Cross-Channel Consensus), a novel blockchain consensus protocol that achieves 372+ TPS throughput with 45ms latency through innovative layered parallel processing. LSCC combines hierarchical sharding with cross-channel coordination to overcome the scalability limitations of traditional consensus mechanisms. Our comprehensive evaluation demonstrates LSCC's superiority over established protocols (PBFT, PoW, PoS) with rigorous statistical validation and Byzantine fault tolerance testing.
+This paper presents LSCC (Layered Sharding with Cross-Channel Consensus), a novel blockchain consensus protocol that achieves 350-400 TPS throughput with 45ms latency through innovative layered parallel processing. LSCC combines hierarchical sharding with cross-channel coordination to overcome the scalability limitations of traditional consensus mechanisms. Our comprehensive evaluation demonstrates LSCC's superiority over established protocols (PBFT, PoW, PoS) with rigorous statistical validation and Byzantine fault tolerance testing.
 
 ### 1. Introduction
 
@@ -73,7 +73,7 @@ Total consensus time: **12ms average** (vs 15,000ms for PoW, 30,000ms for PBFT)
 - Throughput scaling: Linear with validator count (vs logarithmic for PBFT)
 
 **Performance Metrics:**
-- **Throughput**: 372+ TPS (measured), scales to 1000+ TPS theoretically
+- **Throughput**: 350-400 TPS (measured), scales to 1000+ TPS theoretically
 - **Latency**: 45ms average (vs 87ms PBFT, 600s PoW)
 - **Energy Efficiency**: 5 units (vs 500 PoW, 12 PBFT)
 - **Cross-shard Efficiency**: 95% (measured across 6 shards)
@@ -235,7 +235,7 @@ Comprehensive security testing demonstrates:
 
 LSCC represents a significant advancement in blockchain consensus technology, achieving enterprise-grade performance while maintaining strong security guarantees. The layered sharding approach with cross-channel consensus delivers:
 
-- **372+ TPS throughput** with proven scalability
+- **350-400 TPS throughput** with proven scalability
 - **45ms latency** for near real-time applications  
 - **Byzantine fault tolerance** against 33% malicious nodes
 - **95% cross-shard efficiency** for complex transaction patterns

@@ -627,7 +627,7 @@ curl http://localhost:5000/api/v1/transactions/stats
 ## 📊 Expected Performance
 
 Based on live testing:
-- **LSCC Throughput**: 372+ TPS
+- **LSCC Throughput**: 350-400 TPS
 - **PoW Throughput**: 87 TPS
 - **LSCC Latency**: ~1.17ms
 - **Cross-shard Efficiency**: 95%

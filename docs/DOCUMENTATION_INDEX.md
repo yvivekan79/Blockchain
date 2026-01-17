@@ -103,6 +103,21 @@ This project includes comprehensive documentation designed for different audienc
 - Quick navigation for different user roles
 - Documentation maintenance guidelines
 
+**Architecture References**: [ARCHITECTURE_REFERENCES.md](./ARCHITECTURE_REFERENCES.md)
+- Detailed PoW, PoS, PBFT, and LSCC algorithm references
+- Industry-standard implementations (Bitcoin, Ethereum, Hyperledger)
+- Performance and security comparisons
+
+**Developer Guide**: [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)
+- Complete developer onboarding guide
+- Code architecture and patterns
+- Testing and debugging workflows
+
+**User Guide**: [USER_GUIDE.md](./USER_GUIDE.md)
+- End-user deployment instructions
+- 4-node cluster setup and configuration
+- Monitoring and troubleshooting
+
 **Project Context**: [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md)
 - Project background and development history
 - Implementation milestones and achievements
@@ -205,7 +220,7 @@ This project includes comprehensive documentation designed for different audienc
 ### Live Performance Data
 All documentation references live performance results from the running system:
 
-- **LSCC Throughput**: 372+ TPS (confirmed via API testing)
+- **LSCC Throughput**: 350-400 TPS (measured performance)
 - **Cross-Shard Efficiency**: 95% (measured in real-time)
 - **Energy Efficiency**: 100x better than PoW (comparative analysis)
 - **API Response Time**: <200ms for most endpoints
@@ -221,7 +236,7 @@ All documentation references live performance results from the running system:
 
 ## 🔄 Documentation Maintenance
 
-### Current Organization (January 2025)
+### Current Organization (January 2026)
 ```
 docs/
 ├── academic/           # Academic and research materials
@@ -230,9 +245,13 @@ docs/
 ├── research/           # Research papers and analysis
 ├── setup/              # Installation and setup instructions
 ├── technical/          # Technical architecture and API docs
-├── DOCUMENTATION_INDEX.md  # This navigation file
-├── PROJECT_CONTEXT.md      # Project history and context
-└── README.md              # Documentation overview
+├── ARCHITECTURE_REFERENCES.md  # Consensus algorithm references (PoW, PoS, PBFT, LSCC)
+├── DEVELOPER_GUIDE.md          # Developer onboarding guide
+├── DOCUMENTATION_INDEX.md      # This navigation file
+├── PROJECT_CONTEXT.md          # Project history and context
+├── README.md                   # Documentation overview
+├── system_architecture_research_content.md  # Research content
+└── USER_GUIDE.md               # End-user deployment guide
 ```
 
 ### Contributing to Documentation

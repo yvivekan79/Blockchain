@@ -18,7 +18,7 @@ This guide provides complete instructions for deploying a heterogeneous LSCC blo
 ├─────────────────────────────────────────────────────────────┤
 │  Host 1-4: PoW Nodes    │  Host 5-8: LSCC Nodes            │
 │  • Mining & Security     │  • High Performance Processing   │
-│  • 7-15 TPS per node     │  • 372+ TPS per node            │
+│  • 7-15 TPS per node     │  • 350-400 TPS per node            │
 │  • Consensus: PoW        │  • Consensus: LSCC               │
 ├─────────────────────────────────────────────────────────────┤
 │           P2P Network Layer (Port 9000)                    │
