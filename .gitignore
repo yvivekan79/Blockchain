@@ -1,4 +1,5 @@
 # Database files - exclude large blockchain data
+replit.md
 data/
 *.vlog
 *.sst
