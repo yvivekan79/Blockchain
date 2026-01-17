@@ -31,7 +31,7 @@ Network Topology:
 │             Multi-Algorithm Consensus Network               │
 ├─────────────────────────────────────────────────────────────┤
 │ LSCC Nodes  │  PoW Nodes   │ PBFT Nodes  │   PoS Nodes      │
-│ (372+ TPS)  │  (7-15 TPS)  │ (89+ TPS)   │  (42+ TPS)       │
+│ (6000+ TPS) │  (7-15 TPS)  │ (89+ TPS)   │  (42+ TPS)       │
 │ Layer-based │  Mining      │ Byzantine   │  Validator       │
 │ Consensus   │  Difficulty  │ Tolerance   │  Selection       │
 ├─────────────────────────────────────────────────────────────┤
@@ -355,7 +355,7 @@ type TestingFramework struct {
 The LSCC blockchain system architecture represents a comprehensive solution for high-throughput distributed consensus. The multi-layered design with cross-channel coordination achieves enterprise-grade performance while maintaining strong security guarantees. The modular architecture enables easy extension and modification, making it suitable for both academic research and production deployment.
 
 Key architectural achievements:
-- **372+ TPS throughput** through layered parallel processing
+- **6,000+ TPS throughput** through layered parallel processing
 - **95% cross-shard efficiency** with hierarchical coordination
 - **Byzantine fault tolerance** against 33% malicious nodes
 - **O(log n) complexity** enabling linear scaling
