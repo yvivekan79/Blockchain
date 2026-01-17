@@ -8,7 +8,7 @@ A complete, production-ready **multi-protocol, multi-server blockchain implement
 
 - **Multi-Consensus Comparison**: Run PoW, PoS, PBFT, and LSCC simultaneously to benchmark efficiency
 - **LSCC Protocol**: Novel cross-channel consensus within shards for high throughput
-- **Proven Performance**: 6,000+ TPS batch processing, 45ms latency
+- **Proven Performance**: 350-400 TPS measured throughput, 45ms latency
 - **4-Server Distributed Architecture**: Production-ready deployment across dedicated nodes
 - **46+ REST API Endpoints**: Comprehensive blockchain operations with Swagger documentation
 
@@ -16,7 +16,7 @@ A complete, production-ready **multi-protocol, multi-server blockchain implement
 
 - **Shard Activation Fixed**: All 4 shards active with 3 validators each
 - **Transaction Processing Verified**: Complete pipeline from injection to block finalization
-- **Performance Validated**: 6,062 TPS (batch), 7,799 TPS (peak) demonstrated
+- **Performance Validated**: 372 TPS sustained throughput demonstrated
 - **Cross-Protocol Consensus**: 67% agreement threshold with protocol-specific weights
 
 ## System Architecture
@@ -57,7 +57,7 @@ The system is configured for **production-ready multi-protocol, multi-server dep
 - **Interface-driven design**: Common consensus interface for all algorithms
 - **LSCC Implementation**: 3-layer hierarchical sharding with cross-channel coordination
 - **Algorithm Manager**: Handles switching between different consensus mechanisms
-- **Performance**: LSCC achieves 6,000+ TPS with 45ms latency
+- **Performance**: LSCC achieves 350-400 TPS with 45ms latency
 
 ### 2. Blockchain Core (`internal/blockchain/`)
 - **Block Management**: Block creation, validation, and storage

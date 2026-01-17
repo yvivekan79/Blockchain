@@ -31,7 +31,7 @@ Network Topology:
 │             Multi-Algorithm Consensus Network               │
 ├─────────────────────────────────────────────────────────────┤
 │ LSCC Nodes  │  PoW Nodes   │ PBFT Nodes  │   PoS Nodes      │
-│ (6000+ TPS) │  (7-15 TPS)  │ (89+ TPS)   │  (42+ TPS)       │
+│ (350+ TPS)  │  (7-15 TPS)  │ (89+ TPS)   │  (42+ TPS)       │
 │ Layer-based │  Mining      │ Byzantine   │  Validator       │
 │ Consensus   │  Difficulty  │ Tolerance   │  Selection       │
 ├─────────────────────────────────────────────────────────────┤
@@ -460,7 +460,7 @@ If Score ≥ 0.70 → COMMIT BLOCK
 | **Processing** | Sequential (all validators) | Parallel (3 layers × 2 shards) |
 | **Validators per decision** | ALL 100 | Only 3 per layer (9 total) |
 | **Time per transaction** | ~260ms | ~15ms |
-| **TPS** | 4-10 | 6,000+ |
+| **TPS** | 4-10 | 350-400 |
 
 ### 12.4 Batch Processing Example
 
@@ -478,7 +478,7 @@ Batch Injection (50 tx)
 └─────────────────────────────────────────────────────────────┘
         │
         ▼
-Total time: 8ms for 50 transactions = 6,062 TPS
+Total time: 8ms for 50 transactions (batch processing)
 ```
 
 ### 12.5 Why LSCC Achieves Higher TPS
@@ -774,7 +774,7 @@ TOTAL TIME: 3 + 5 + 4 + 3 = 15ms
 |--------|-------|
 | **Time to finality** | ~15ms |
 | **Message complexity** | O(log n) - logarithmic growth |
-| **TPS** | 6,000+ transactions per second |
+| **TPS** | 350-400 transactions per second (measured) |
 | **Security model** | Multi-layer BFT (33% per layer) |
 | **Finality** | Deterministic with weighted scoring |
 | **Scalability** | Excellent (layers scale independently) |
@@ -802,7 +802,7 @@ TPS vs Network Size:
 PoW      15 TPS      15 TPS      15 TPS       15 TPS      (constant but slow)
 PoS      80 TPS      60 TPS      42 TPS       20 TPS      (degrades slowly)
 PBFT     200 TPS     50 TPS      10 TPS       <1 TPS      (collapses quickly)
-LSCC     4000 TPS    5500 TPS    6000 TPS     8000 TPS    (improves with shards!)
+LSCC     300 TPS     350 TPS     400 TPS      500 TPS     (improves with shards)
 ```
 
 #### Message Complexity
@@ -856,9 +856,9 @@ LSCC  ▌                                                         18
 Throughput (higher is better):
 
 PoW   ▌                                                         15 TPS
-PoS   ██                                                        42 TPS
-PBFT  ████                                                      89 TPS
-LSCC  ████████████████████████████████████████████████████████  6,000+ TPS
+PoS   ███                                                       42 TPS
+PBFT  ██████                                                    89 TPS
+LSCC  ████████████████████████████████████████████████████████  350-400 TPS
 ```
 
 ## Conclusion
@@ -866,7 +866,7 @@ LSCC  ████████████████████████�
 The LSCC blockchain system architecture represents a comprehensive solution for high-throughput distributed consensus. The multi-layered design with cross-channel coordination achieves enterprise-grade performance while maintaining strong security guarantees. The modular architecture enables easy extension and modification, making it suitable for both academic research and production deployment.
 
 Key architectural achievements:
-- **6,000+ TPS throughput** through layered parallel processing
+- **350-400 TPS throughput** through layered parallel processing (measured)
 - **95% cross-shard efficiency** with hierarchical coordination
 - **Byzantine fault tolerance** against 33% malicious nodes
 - **O(log n) complexity** enabling linear scaling
