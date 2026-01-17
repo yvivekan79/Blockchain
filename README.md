@@ -1,4 +1,4 @@
-# LSCC Blockchain - Replit Configuration
+# LSCC Blockchain 
 
 ## Overview
 
