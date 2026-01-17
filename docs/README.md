@@ -1,35 +1,35 @@
 # LSCC Blockchain Documentation
 
-## 📁 Organized Documentation Structure
+Complete documentation for the LSCC (Layered Sharding with Cross-Channel Consensus) blockchain implementation.
 
-### 🔬 Research Papers (`research/`)
-- **LSCC_RESEARCH_PAPER.md** - Core research paper with academic analysis and performance validation
+## Documentation Index
 
-### ⚙️ Technical Documentation (`technical/`)
-- **TECHNICAL_ARCHITECTURE_GUIDE.md** - System architecture and component design
-- **API_SPECIFICATIONS.md** - Complete REST API and WebSocket documentation
+| Document | Description |
+|----------|-------------|
+| [SETUP.md](./SETUP.md) | Installation and development environment setup |
+| [USER_GUIDE.md](./USER_GUIDE.md) | 4-node cluster deployment guide (192.168.50.147-150) |
+| [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) | Developer onboarding, code patterns, testing |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | System architecture and component design |
+| [API_REFERENCE.md](./API_REFERENCE.md) | Complete REST API and WebSocket documentation |
+| [PERFORMANCE_GUIDE.md](./PERFORMANCE_GUIDE.md) | Performance metrics and optimization |
+| [ARCHITECTURE_REFERENCES.md](./ARCHITECTURE_REFERENCES.md) | PoW, PoS, PBFT, LSCC algorithm comparisons |
+| [RESEARCH_PAPER.md](./RESEARCH_PAPER.md) | Academic research paper with analysis |
 
-### 🚀 Operations & Deployment (`operations/`)
-- **PERFORMANCE_AND_DEPLOYMENT_GUIDE.md** - Performance optimization and deployment
+## Quick Start
 
-### 📋 Setup Instructions (`setup/`)
-- **SETUP_INSTRUCTIONS.md** - Installation and configuration guide
+1. **New to the project?** Start with [SETUP.md](./SETUP.md)
+2. **Deploying a cluster?** Read [USER_GUIDE.md](./USER_GUIDE.md)
+3. **Contributing code?** See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)
+4. **Using the APIs?** Check [API_REFERENCE.md](./API_REFERENCE.md)
+5. **Understanding consensus?** Read [ARCHITECTURE_REFERENCES.md](./ARCHITECTURE_REFERENCES.md)
 
-### 📖 Implementation Guides (`guides/`)
-- **MULTI_NODE_DEPLOYMENT_GUIDE.md** - 4-node distributed cluster deployment
+## Key Specifications
 
-### 📚 Root Documentation
-- **ARCHITECTURE_REFERENCES.md** - PoW, PoS, PBFT, LSCC algorithm references with industry comparisons
-- **DEVELOPER_GUIDE.md** - Complete developer onboarding guide
-- **DOCUMENTATION_INDEX.md** - Complete documentation navigation index
-- **PROJECT_CONTEXT.md** - Project background and development history
-- **system_architecture_research_content.md** - Detailed research content
-- **USER_GUIDE.md** - End-user deployment and operations guide
-
-## Quick Navigation
-
-- **For Researchers**: Start with `research/` and `academic/`
-- **For Developers**: Begin with `DEVELOPER_GUIDE.md`, `technical/` and `setup/`
-- **For Operations**: Focus on `USER_GUIDE.md`, `operations/` and `guides/`
-- **For New Users**: Start with `setup/` and `DOCUMENTATION_INDEX.md`
-- **For Algorithm Understanding**: Read `ARCHITECTURE_REFERENCES.md`
+| Specification | Value |
+|---------------|-------|
+| Performance | 350-400 TPS (measured) |
+| Latency | 45ms average |
+| API Port | 5000 |
+| P2P Port | 9000 |
+| Nodes | 192.168.50.147-150 |
+| Consensus | LSCC, PoW, PoS, PBFT |
