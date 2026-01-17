@@ -5,124 +5,74 @@ Automation scripts for the LSCC Blockchain project.
 ## Directory Structure
 
 ### `/deployment`
-Scripts for deploying and managing blockchain clusters:
-
 | Script | Description |
 |--------|-------------|
-| `deploy-cluster.sh` | Main deployment script (single/multi-protocol) |
+| `deploy-cluster.sh` | Main deployment script (deploy/start/stop/status/restart) |
 | `start-injection.sh` | Start transaction injection for testing |
-| `stop-distributed-nodes.sh` | Stop all blockchain nodes |
 
 ### `/testing`
-Scripts for testing and benchmarking:
-
 | Script | Description |
 |--------|-------------|
-| `convergence-benchmark-test.sh` | Convergence benchmark testing |
-| `distributed-convergence-test.sh` | Distributed convergence testing |
-| `execute-academic-tests.sh` | Execute academic test suite |
-| `test-distributed-setup.sh` | Test distributed setup |
-| `test-protocol-convergence.sh` | Test protocol convergence |
-| `verify-test-results.sh` | Verify test results |
+| `convergence-benchmark-test.sh` | Benchmark with detailed TPS metrics |
+| `distributed-convergence-test.sh` | Test convergence across distributed nodes |
+| `execute-academic-tests.sh` | Academic testing framework |
+| `test-distributed-setup.sh` | Verify distributed cluster setup |
+| `test-protocol-convergence.sh` | Simple convergence test |
+| `verify-test-results.sh` | Verify test environment |
 
 ### `/monitoring`
-Scripts for monitoring:
-
 | Script | Description |
 |--------|-------------|
-| `monitor-injection.sh` | Monitor transaction injection |
-| `quick-monitor.sh` | Quick system monitoring |
+| `monitor-injection.sh` | Interactive injection monitoring |
+| `quick-monitor.sh` | Quick status check |
 
 ### Root Level
-
 | Script | Description |
 |--------|-------------|
-| `install_go.sh` | Install Go dependencies |
+| `install_go.sh` | Install Go on remote servers |
 
-## Deployment Guide
+## Quick Start
 
-### Step 1: Initialize Cluster Configuration
+### Deploy Cluster
 
 ```bash
+# Initialize cluster configuration
 ./scripts/deployment/deploy-cluster.sh init
-```
 
-This interactive wizard lets you:
-- Define which nodes participate (IP addresses)
-- Choose single-protocol or multi-protocol mode
-- Set SSH user and remote directory
-
-### Step 2: Generate Config Files
-
-```bash
+# Generate config files
 ./scripts/deployment/deploy-cluster.sh generate-configs
-```
 
-Creates YAML config files for each node based on your cluster configuration.
-
-### Step 3: Build and Deploy
-
-```bash
-# Build the binary
+# Build and deploy
 go build -o lscc.exe main.go
-
-# Deploy to all nodes
 ./scripts/deployment/deploy-cluster.sh deploy
-```
 
-### Step 4: Start Cluster
-
-```bash
+# Start/stop/status
 ./scripts/deployment/deploy-cluster.sh start
+./scripts/deployment/deploy-cluster.sh status
+./scripts/deployment/deploy-cluster.sh stop
 ```
 
-### Other Commands
+### Run Tests
 
 ```bash
-./scripts/deployment/deploy-cluster.sh status    # Check all nodes
-./scripts/deployment/deploy-cluster.sh stop      # Stop all nodes
-./scripts/deployment/deploy-cluster.sh restart   # Restart cluster
+# Quick convergence test
+./scripts/testing/test-protocol-convergence.sh 192.168.50.147
+
+# Full benchmark
+./scripts/testing/convergence-benchmark-test.sh
+
+# Academic tests
+./scripts/testing/execute-academic-tests.sh
 ```
 
-## Cluster Configuration Examples
-
-After running `init`, edit `scripts/deployment/cluster-config.sh`:
-
-### Single-Protocol Mode (All LSCC)
+### Monitor
 
 ```bash
-NODES=("192.168.50.147" "192.168.50.148" "192.168.50.149" "192.168.50.150")
-PROTOCOLS=("lscc" "lscc" "lscc" "lscc")
-```
+# Quick status
+./scripts/monitoring/quick-monitor.sh 192.168.50.147
 
-### Multi-Protocol Mode (Different per Node)
-
-```bash
-NODES=("192.168.50.147" "192.168.50.148" "192.168.50.149" "192.168.50.150")
-PROTOCOLS=("pow" "pos" "pbft" "lscc")
-```
-
-### 2-Node Cluster
-
-```bash
-NODES=("192.168.50.147" "192.168.50.148")
-PROTOCOLS=("lscc" "lscc")
-```
-
-## Supported Protocols
-
-| Protocol | Description |
-|----------|-------------|
-| `lscc` | Layered Sharding with Cross-Channel Consensus |
-| `pow` | Proof of Work |
-| `pos` | Proof of Stake |
-| `pbft` | Practical Byzantine Fault Tolerance |
-
-## Transaction Injection
-
-```bash
-# Start injection (50 TPS for 120 seconds)
-./scripts/deployment/start-injection.sh 192.168.50.147 50 120
+# Interactive monitoring
+./scripts/monitoring/monitor-injection.sh 192.168.50.147
 ```
 
 ## Requirements
