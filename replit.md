@@ -2,7 +2,7 @@
 
 ## Overview
 
-A production-ready multi-protocol blockchain implementation featuring the LSCC (Layered Sharding with Cross-Channel Consensus) protocol written in Go. The system implements multiple consensus algorithms (PoW, PoS, PBFT, LSCC) that can run simultaneously for comparison and benchmarking, achieving 350-400 TPS throughput with 45ms latency.
+LSCC (Layered Sharding with Cross-Channel Consensus) is a production-ready multi-protocol blockchain implementation written in Go. The system implements multiple consensus algorithms running in parallel for comparison and research purposes, with a focus on achieving high throughput (350-400 TPS) through a 3-layer hierarchical sharding architecture.
 
 The project is designed for both academic research and production deployment across a 4-server distributed architecture.
 
@@ -48,29 +48,36 @@ Each layer processes independently with 4-phase parallel consensus (12ms average
 - `/scripts` - Deployment, testing, and monitoring automation
 - `main.go` - Application entry point
 
-### Network Architecture
-Designed for 4-server deployment:
-- Server 147: PoW Bootstrap Node (API: 5001, P2P: 9001)
-- Server 148: PoS Validator Node (API: 5002, P2P: 9002)
-- Server 149: PBFT Validator Node (API: 5003, P2P: 9003)
-- Server 150: LSCC Validator Node (API: 5004, P2P: 9004)
+### API Design
+- REST API on port 5000 with 46+ endpoints
+- P2P communication on port 9000
+- Academic testing framework with 15 specialized endpoints
+- Byzantine fault injection with 6 attack scenarios
+- Prometheus-compatible metrics endpoints
 
-Default local development uses API port 5000 and P2P port 9000.
+### Deployment Architecture
+Designed for 4-node distributed deployment (192.168.50.147-150) with:
+- Each node capable of running any consensus protocol
+- Cross-node P2P communication
+- Centralized monitoring and metrics collection
 
 ## External Dependencies
 
 ### Database
-- **BadgerDB**: Embedded key-value store for blockchain data persistence (no external database server required)
+- **BadgerDB**: Embedded key-value store for blockchain data persistence
 
-### Go Dependencies
+### Go Libraries
 - **Gin**: HTTP web framework for REST API
-- **Viper**: Configuration management
-- **Logrus**: Structured logging
-- **Prometheus client**: Metrics export (optional)
+- **Viper**: Configuration management (YAML parsing)
+- **Logrus**: Structured logging with JSON output
+- **Prometheus client**: Metrics collection and exposition
 
-### Deployment Infrastructure
-- **SystemD**: Linux service management for production deployment
-- **SSH**: Remote deployment automation across cluster nodes
+### Infrastructure
+- 4-server distributed cluster architecture
+- Shell scripts for deployment automation
+- Academic testing framework for research validation
 
-### No External Services Required
-The blockchain is self-contained with P2P networking for node communication. No external APIs, cloud services, or third-party integrations are required for core functionality.
+### Network Protocols
+- REST API (HTTP/JSON) for client communication
+- Custom P2P protocol for node-to-node consensus
+- WebSocket support for real-time updates
