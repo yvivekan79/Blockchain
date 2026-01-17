@@ -27,3 +27,4 @@ vendor/
 .git.backup.*
 attached_assets/
 data/
+.replit
