@@ -105,68 +105,121 @@ def adjust_difficulty(actual_time, expected_time, current_difficulty):
     return new_difficulty
 ```
 
-### 1.2 Our PoW Implementation
+### 1.2 Our Bitcoin-Compatible PoW Implementation
 
-Our PoW implementation follows Bitcoin's core principles with adaptations for flexibility.
+Our PoW implementation **fully matches Bitcoin's protocol** with production-grade features:
 
 #### Implementation Details
 
 | Component | Our Implementation | Bitcoin |
 |-----------|-------------------|---------|
-| Hash Function | SHA-256 (single) | Double SHA-256 |
-| Nonce Space | Configurable | 4 bytes fixed |
-| Block Time | Configurable (default: 15s) | 10 minutes |
-| Difficulty | Configurable (default: 4) | Dynamic adjustment |
-| Gas Limit | 200,000,000 | N/A (Bitcoin uses weight) |
+| Hash Function | **Double SHA-256** | Double SHA-256 |
+| Block Header | **80-byte serialized** | 80-byte structure |
+| Nonce Space | **4 bytes (2³² values)** | 4 bytes fixed |
+| ExtraNonce | **Coinbase-based** | In coinbase transaction |
+| Block Time | Configurable (default: 10 min) | 10 minutes |
+| Difficulty Adjustment | **Every 2016 blocks, 4x clamp** | Every 2016 blocks |
+| Target Encoding | **Compact bits format** | Compact bits |
+| Timestamp Validation | **2-hour future limit** | 2-hour future limit |
+| Block Reward | **50 BTC with halving** | 50 BTC halving every 210k blocks |
 
 #### Code Location
 
 ```
-internal/consensus/pow.go          # PoW consensus engine
+internal/consensus/pow_bitcoin.go  # Bitcoin-style PoW engine
+internal/consensus/pow_stratum.go  # Stratum mining pool protocol
+internal/consensus/pow.go          # Legacy PoW (simplified)
 internal/blockchain/block.go       # Block structure
-internal/blockchain/mining.go      # Mining logic
+```
+
+#### Key Features
+
+1. **80-Byte Block Header Structure**
+```go
+type BlockHeader struct {
+    Version       int32      // 4 bytes - Protocol version
+    PrevBlockHash [32]byte   // 32 bytes - Previous block hash
+    MerkleRoot    [32]byte   // 32 bytes - Merkle root of transactions
+    Timestamp     uint32     // 4 bytes - Unix timestamp
+    Bits          uint32     // 4 bytes - Compact difficulty target
+    Nonce         uint32     // 4 bytes - Mining nonce
+}
+```
+
+2. **Double SHA-256 Hashing**
+```go
+func DoubleSHA256(data []byte) [32]byte {
+    first := sha256.Sum256(data)
+    return sha256.Sum256(first[:])
+}
+```
+
+3. **Compact Bits Encoding**
+```go
+// Convert bits to 256-bit target
+func bitsToTarget(bits uint32) *big.Int {
+    exponent := bits >> 24
+    mantissa := bits & 0x007fffff
+    target := big.NewInt(int64(mantissa))
+    target.Lsh(target, uint(8*(exponent-3)))
+    return target
+}
+```
+
+4. **Bitcoin Difficulty Adjustment**
+```go
+// Adjust every 2016 blocks with 4x clamp
+ratio := actualTime / expectedTime
+if ratio < 0.25 { ratio = 0.25 }
+if ratio > 4.0 { ratio = 4.0 }
+newTarget.Mul(oldTarget, ratio)
+```
+
+5. **Block Reward Halving**
+```go
+func (pow *BitcoinPoW) GetBlockReward(height int64) int64 {
+    halvings := height / 210000  // Halving every 210,000 blocks
+    if halvings >= 64 { return 0 }
+    return 5000000000 >> uint(halvings)  // 50 BTC initial
+}
 ```
 
 #### Configuration
 
 ```yaml
 consensus:
-  algorithm: "pow"
-  difficulty: 4              # Number of leading zeros required
-  block_time: 15             # Target block time in seconds
-  max_nonce: 1000000000      # Maximum nonce attempts
-  gas_limit: 200000000       # Gas limit per block
+  algorithm: "bitcoin_pow"
+  difficulty: 4              # Initial difficulty (compact bits)
+  block_time: 600            # Target 10 minutes (600 seconds)
+  
+mining:
+  pool_enabled: true         # Enable Stratum mining pool
+  pool_port: 3333            # Stratum server port
+  pool_difficulty: 1.0       # Share difficulty
 ```
 
-#### Mining Algorithm
+#### Stratum Mining Pool Protocol
+
+Full Stratum v1 compatible mining pool server:
 
 ```go
-func (pow *PoW) Mine(block *Block) (bool, error) {
-    target := pow.calculateTarget()
-    
-    for nonce := uint64(0); nonce < pow.maxNonce; nonce++ {
-        block.Nonce = nonce
-        hash := pow.calculateHash(block)
-        
-        if pow.meetsTarget(hash, target) {
-            block.Hash = hash
-            return true, nil
-        }
-    }
-    
-    return false, ErrNonceExhausted
-}
+// Mining pool server with worker management
+server := NewStratumServer(pow, logger, 3333)
+server.Start()
 
-func (pow *PoW) calculateTarget() *big.Int {
-    // Target = MaxTarget / 2^difficulty
-    target := new(big.Int).Exp(
-        big.NewInt(2),
-        big.NewInt(256 - int64(pow.difficulty)),
-        nil,
-    )
-    return target
-}
+// Create mining job for workers
+job := server.CreateJob(block)
+
+// Track worker statistics
+stats := server.GetWorkerStats()
 ```
+
+Supported Stratum methods:
+- `mining.subscribe` - Worker subscription
+- `mining.authorize` - Worker authorization
+- `mining.submit` - Share submission
+- `mining.notify` - New job notification
+- `mining.set_difficulty` - Difficulty adjustment
 
 ---
 
