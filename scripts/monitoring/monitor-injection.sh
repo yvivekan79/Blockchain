@@ -4,6 +4,7 @@
 # Usage: ./monitor-injection.sh [server_ip] [interval_seconds]
 
 SERVER_IP=${1:-"localhost"}
+PORT=5000
 INTERVAL=${2:-5}
 LOGFILE="injection-monitor-$(date +%Y%m%d-%H%M%S).log"
 
@@ -13,11 +14,11 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 echo "========================================"
 echo "LSCC Blockchain Injection Monitor"
-echo "Server: $SERVER_IP"
+echo "Server: $SERVER_IP:$PORT"
 echo "Interval: ${INTERVAL}s"
 echo "Log file: $LOGFILE"
 echo "========================================"
@@ -26,8 +27,8 @@ echo
 
 # Function to check if server is reachable
 check_server() {
-    if ! curl -s --connect-timeout 3 "http://$SERVER_IP:5000/health" > /dev/null 2>&1; then
-        echo -e "${RED}[ERROR] Server $SERVER_IP is not reachable${NC}"
+    if ! curl -s --connect-timeout 3 "http://$SERVER_IP:$PORT/health" > /dev/null 2>&1; then
+        echo -e "${RED}[ERROR] Server $SERVER_IP:$PORT is not reachable${NC}"
         return 1
     fi
     return 0
@@ -36,7 +37,7 @@ check_server() {
 # Function to start injection
 start_injection() {
     echo -e "${YELLOW}Starting transaction injection...${NC}"
-    curl -X POST "http://$SERVER_IP:5000/api/v1/transaction-injection/start-injection" \
+    curl -X POST "http://$SERVER_IP:$PORT/api/v1/transaction-injection/start-injection" \
         -H "Content-Type: application/json" \
         -d '{
             "tps": 100,
@@ -48,45 +49,22 @@ start_injection() {
 # Function to stop injection
 stop_injection() {
     echo -e "${YELLOW}Stopping transaction injection...${NC}"
-    curl -X POST "http://$SERVER_IP:5000/api/v1/transaction-injection/stop-injection" 2>/dev/null | jq '.'
+    curl -X POST "http://$SERVER_IP:$PORT/api/v1/transaction-injection/stop-injection" 2>/dev/null | jq '.'
     echo
 }
 
 # Function to get injection stats
 get_injection_stats() {
-    curl -s "http://$SERVER_IP:5000/api/v1/transaction-injection/injection-stats" 2>/dev/null
+    curl -s "http://$SERVER_IP:$PORT/api/v1/transaction-injection/injection-stats" 2>/dev/null
 }
 
 # Function to get blockchain stats
 get_blockchain_stats() {
-    # Try multiple endpoints to get blockchain stats
-    local stats=$(curl -s "http://$SERVER_IP:5000/api/v1/blockchain/info" 2>/dev/null)
+    local stats=$(curl -s "http://$SERVER_IP:$PORT/api/v1/blockchain/info" 2>/dev/null)
     if [ -z "$stats" ] || [ "$stats" = "{}" ]; then
-        stats=$(curl -s "http://$SERVER_IP:5000/api/v1/stats" 2>/dev/null)
+        stats=$(curl -s "http://$SERVER_IP:$PORT/api/v1/stats" 2>/dev/null)
     fi
     echo "$stats"
-}
-
-# Function to check all algorithm health
-check_algorithm_health() {
-    echo -e "${CYAN}Algorithm Health Status:${NC}"
-    for port in 5001 5002 5003 5004; do
-        local algo_name=""
-        case $port in
-            5001) algo_name="PoW" ;;
-            5002) algo_name="PoS" ;;
-            5003) algo_name="PBFT" ;;
-            5004) algo_name="LSCC" ;;
-        esac
-        
-        local status=$(curl -s "http://$SERVER_IP:5000/health" 2>/dev/null | jq -r '.status // "error"')
-        if [ "$status" = "healthy" ]; then
-            echo -e "  ${GREEN}$algo_name (Port $port): $status${NC}"
-        else
-            echo -e "  ${RED}$algo_name (Port $port): $status${NC}"
-        fi
-    done
-    echo
 }
 
 # Function to display stats
@@ -108,7 +86,7 @@ display_stats() {
     local failed_txs=$(echo "$injection_data" | jq -r '.stats.failed_txs // 0')
     local avg_latency=$(echo "$injection_data" | jq -r '.stats.average_latency_ms // 0')
     
-    # Parse blockchain stats with multiple fallback fields
+    # Parse blockchain stats
     local block_height=$(echo "$blockchain_data" | jq -r '.height // .chain_height // .block_height // 0')
     local total_transactions=$(echo "$blockchain_data" | jq -r '.transaction_count // .total_transactions // 0')
     local blockchain_tps=$(echo "$blockchain_data" | jq -r '.tps // .current_tps // 0')
@@ -156,14 +134,12 @@ echo "Options:"
 echo "1. Start monitoring (auto-refresh every ${INTERVAL}s)"
 echo "2. Start injection and monitor"
 echo "3. Stop injection"
-echo "4. Check algorithm health"
-echo "5. One-time status check"
-echo -n "Choose option [1-5]: "
+echo "4. One-time status check"
+echo -n "Choose option [1-4]: "
 read choice
 
 case $choice in
     1)
-        # Check server first
         if ! check_server; then
             exit 1
         fi
@@ -195,11 +171,6 @@ case $choice in
         fi
         ;;
     4)
-        if check_server; then
-            check_algorithm_health
-        fi
-        ;;
-    5)
         if check_server; then
             display_stats
         fi

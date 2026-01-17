@@ -1,123 +1,112 @@
 #!/bin/bash
 
-# Test script to demonstrate distributed LSCC blockchain deployment
-# This simulates a 4-node distributed setup on different hosts
+# Test script to verify distributed LSCC blockchain deployment
+# This tests a single-protocol cluster across multiple nodes
 
-echo "🔗 LSCC Blockchain Distributed Setup Demonstration"
-echo "=================================================="
+echo "LSCC Blockchain Distributed Setup Verification"
+echo "==============================================="
 
-# Check if deployment script exists
-if [[ ! -f "scripts/deploy-multi-node.sh" ]]; then
-    echo "❌ Deployment script not found!"
-    exit 1
+# Default nodes
+NODES=("192.168.50.147" "192.168.50.148" "192.168.50.149" "192.168.50.150")
+PORT=5000
+
+# Check command line argument for custom nodes
+if [ -n "$1" ]; then
+    NODES=("$@")
 fi
 
-echo "✅ Multi-node deployment script available"
-
-# Show node type configurations
+echo "Testing nodes: ${NODES[*]}"
+echo "Port: $PORT"
 echo ""
-echo "📋 Available Node Configurations:"
-echo "=================================="
 
-for config in examples/multi-node-configs/*.yaml; do
-    if [[ -f "$config" ]]; then
-        echo "📄 $(basename "$config")"
-        echo "   - $(grep 'description:' "$config" | cut -d'"' -f2)"
-        echo "   - Algorithm: $(grep 'algorithm:' "$config" | head -1 | cut -d'"' -f2)"
-        echo "   - Role: $(grep 'role:' "$config" | cut -d'"' -f2)"
-        echo ""
+# Phase 1: Health Check
+echo "Phase 1: Health Check"
+echo "====================="
+
+active_nodes=0
+for node in "${NODES[@]}"; do
+    echo -n "  Node $node: "
+    if curl -s --connect-timeout 3 "http://$node:$PORT/health" > /dev/null 2>&1; then
+        echo "HEALTHY"
+        ((active_nodes++))
+    else
+        echo "NOT RESPONDING"
     fi
 done
 
-# Show network configuration details
-echo "🌐 Network Configuration Evidence:"
-echo "=================================="
-
-echo "🔍 External IP placeholders (for multi-host deployment):"
-grep -n "YOUR_EXTERNAL_IP" examples/multi-node-configs/*.yaml | head -5
-
 echo ""
-echo "🔍 Bootstrap IP placeholders (for connecting to remote bootstrap):"
-grep -n "BOOTSTRAP_IP" examples/multi-node-configs/*.yaml | head -3
+echo "Active nodes: $active_nodes/${#NODES[@]}"
 
-echo ""
-echo "🔍 Network binding configuration (0.0.0.0 for external access):"
-grep -n "bind_address.*0.0.0.0" examples/multi-node-configs/*.yaml
+if [ $active_nodes -eq 0 ]; then
+    echo "No nodes are responding. Please start the cluster first."
+    echo "Use: ./scripts/deployment/deploy-cluster.sh start"
+    exit 1
+fi
 
+# Phase 2: Network Connectivity
 echo ""
-echo "🔗 P2P Network Implementation:"
+echo "Phase 2: Network Connectivity"
 echo "=============================="
 
-# Check if P2P network code exists
-if [[ -f "internal/network/p2p.go" ]]; then
-    echo "✅ P2P networking layer implemented"
-    echo "   - Node discovery: $(grep -c "connectToPeer\|AddPeer" internal/network/p2p.go) methods"
-    echo "   - Cross-algorithm messaging: $(grep -c "CrossAlgorithmMessage" internal/network/p2p.go) references"
-    echo "   - External IP detection: $(grep -c "getExternalIP" internal/network/p2p.go) implementation"
+for node in "${NODES[@]}"; do
+    peers=$(curl -s --connect-timeout 3 "http://$node:$PORT/api/v1/network/peers" 2>/dev/null)
+    if [ -n "$peers" ]; then
+        peer_count=$(echo "$peers" | jq -r '.peer_count // .connected_peers // 0' 2>/dev/null)
+        echo "  Node $node: $peer_count peers connected"
+    fi
+done
+
+# Phase 3: Blockchain State
+echo ""
+echo "Phase 3: Blockchain State"
+echo "========================="
+
+for node in "${NODES[@]}"; do
+    info=$(curl -s --connect-timeout 3 "http://$node:$PORT/api/v1/blockchain/info" 2>/dev/null)
+    if [ -n "$info" ]; then
+        height=$(echo "$info" | jq -r '.chain_height // .height // 0' 2>/dev/null)
+        txs=$(echo "$info" | jq -r '.total_transactions // .transaction_count // 0' 2>/dev/null)
+        algo=$(echo "$info" | jq -r '.consensus_algorithm // "unknown"' 2>/dev/null)
+        echo "  Node $node: Height=$height, Txs=$txs, Algorithm=$algo"
+    fi
+done
+
+# Phase 4: Shard Status
+echo ""
+echo "Phase 4: Shard Status"
+echo "====================="
+
+for node in "${NODES[@]}"; do
+    shards=$(curl -s --connect-timeout 3 "http://$node:$PORT/api/v1/shards" 2>/dev/null)
+    if [ -n "$shards" ]; then
+        active=$(echo "$shards" | jq -r '.active_shards // 0' 2>/dev/null)
+        total=$(echo "$shards" | jq -r '.total_shards // 0' 2>/dev/null)
+        echo "  Node $node: $active/$total shards active"
+    fi
+done
+
+# Summary
+echo ""
+echo "VERIFICATION SUMMARY"
+echo "===================="
+echo "Active nodes: $active_nodes/${#NODES[@]}"
+
+if [ $active_nodes -ge 2 ]; then
+    echo "Distributed cluster is OPERATIONAL"
 else
-    echo "❌ P2P networking not found"
+    echo "Cluster needs more nodes for distributed operation"
 fi
 
 echo ""
-echo "🚀 Deployment Simulation:"
-echo "========================="
-
-echo "📍 Simulated 4-Host Deployment Scenario:"
-echo ""
-echo "Host 1 (192.168.1.100): Bootstrap PoW Node"
-echo "  Command: ./scripts/deploy-multi-node.sh bootstrap bootstrap-pow-1"
-echo "  Role: First node, accepts connections"
-echo ""
-echo "Host 2 (192.168.1.101): PoW Validator Node"
-echo "  Command: ./scripts/deploy-multi-node.sh pow pow-node-2 192.168.1.100"
-echo "  Role: Connects to bootstrap, runs PoW consensus"
-echo ""
-echo "Host 3 (192.168.1.102): LSCC High-Performance Node"
-echo "  Command: ./scripts/deploy-multi-node.sh lscc lscc-node-1 192.168.1.100"
-echo "  Role: Connects to bootstrap, runs LSCC consensus"
-echo ""
-echo "Host 4 (192.168.1.103): LSCC High-Performance Node"
-echo "  Command: ./scripts/deploy-multi-node.sh lscc lscc-node-2 192.168.1.100"
-echo "  Role: Connects to bootstrap, runs LSCC consensus"
-
-echo ""
-echo "🔧 Network Verification Commands:"
-echo "================================="
-echo "# Check network status on any node:"
-echo "curl http://HOST_IP:5000/api/v1/network/status"
+echo "Network Verification Commands:"
+echo "=============================="
+echo "# Check network status:"
+echo "curl http://NODE_IP:$PORT/api/v1/network/status"
 echo ""
 echo "# Check connected peers:"
-echo "curl http://HOST_IP:5000/api/v1/network/peers"
+echo "curl http://NODE_IP:$PORT/api/v1/network/peers"
 echo ""
-echo "# Test cross-algorithm communication:"
-echo "curl -X POST http://HOST_IP:5000/api/v1/network/cross-algorithm-message \\"
-echo '  -H "Content-Type: application/json" \'
-echo '  -d {"to_algorithm": "pow", "message_type": "sync", "payload": {}}'
+echo "# Check blockchain info:"
+echo "curl http://NODE_IP:$PORT/api/v1/blockchain/info"
 
-echo ""
-echo "🔐 Required Firewall Rules:"
-echo "=========================="
-echo "sudo ufw allow 5000/tcp  # HTTP API server"
-echo "sudo ufw allow 9000/tcp  # P2P networking"
-
-echo ""
-echo "✅ Distributed Deployment Capabilities Verified:"
-echo "================================================"
-echo "✓ Multi-node configuration files (3 types)"
-echo "✓ External IP detection and configuration"
-echo "✓ Bootstrap node discovery mechanism"
-echo "✓ P2P networking with peer communication"
-echo "✓ Cross-algorithm message routing"
-echo "✓ Automated deployment scripts"
-echo "✓ Production systemd service creation"
-echo "✓ Network monitoring APIs"
-
-echo ""
-echo "🌍 This LSCC blockchain solution supports:"
-echo "- Multiple consensus algorithms across different physical hosts"
-echo "- Automated multi-host deployment"
-echo "- Real-time cross-algorithm communication"
-echo "- Production-ready distributed networking"
-
-echo ""
-echo "🎯 Ready for distributed deployment across 4+ physical hosts!"
+exit 0
