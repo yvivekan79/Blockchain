@@ -1,6 +1,6 @@
 # LSCC Blockchain User Guide
 
-Complete guide for deploying and running the LSCC blockchain across distributed nodes.
+Complete guide for deploying and running the blockchain across 4 distributed nodes with a single consensus protocol.
 
 ---
 
@@ -10,8 +10,8 @@ Complete guide for deploying and running the LSCC blockchain across distributed 
 2. [Prerequisites](#2-prerequisites)
 3. [Architecture](#3-architecture)
 4. [Quick Start](#4-quick-start)
-5. [Detailed Configuration](#5-detailed-configuration)
-6. [Deployment Scenarios](#6-deployment-scenarios)
+5. [Configuration](#5-configuration)
+6. [Deployment](#6-deployment)
 7. [Running the Nodes](#7-running-the-nodes)
 8. [Testing & Verification](#8-testing--verification)
 9. [Monitoring](#9-monitoring)
@@ -21,14 +21,18 @@ Complete guide for deploying and running the LSCC blockchain across distributed 
 
 ## 1. Overview
 
-The LSCC blockchain supports two deployment modes:
+This guide covers deploying a **single consensus protocol across 4 distributed nodes**. All nodes work together as a unified cluster.
 
-| Mode | Description | Use Case |
-|------|-------------|----------|
-| **Single Protocol** | Run one consensus algorithm (LSCC) across 4 nodes | Simple, high-performance deployment |
-| **Multi-Protocol** | Run all 4 protocols (PoW, PoS, PBFT, LSCC) with cross-protocol consensus | Research, comparison, failover |
+### Supported Deployment Scenarios
 
-This guide covers both scenarios using 4 distributed nodes.
+| Scenario | Description | Use Case |
+|----------|-------------|----------|
+| **LSCC Cluster** | All 4 nodes run LSCC | High-performance with sharding |
+| **PoW Cluster** | All 4 nodes run Proof of Work | Traditional mining-based consensus |
+| **PoS Cluster** | All 4 nodes run Proof of Stake | Energy-efficient stake-based consensus |
+| **PBFT Cluster** | All 4 nodes run PBFT | Byzantine fault tolerant consensus |
+
+Each scenario uses the same 4 servers but with protocol-specific configuration.
 
 ---
 
@@ -48,11 +52,11 @@ This guide covers both scenarios using 4 distributed nodes.
 - Ubuntu 20.04+ or compatible Linux distribution
 - Go 1.19+ (for building from source)
 - SSH access between nodes
-- Open ports: 5001-5004 (API), 9001-9004 (P2P)
+- Open ports: 5000 (API), 9000 (P2P)
 
 ### Network Setup
 
-Ensure all nodes can communicate with each other:
+Ensure all nodes can communicate:
 
 ```bash
 # Test connectivity from any node
@@ -64,11 +68,9 @@ ping 192.168.50.150
 
 ### Firewall Rules
 
-Open required ports on all nodes:
-
 ```bash
-sudo ufw allow 5001:5004/tcp  # API ports
-sudo ufw allow 9001:9004/tcp  # P2P ports
+sudo ufw allow 5000/tcp  # API port
+sudo ufw allow 9000/tcp  # P2P port
 sudo ufw reload
 ```
 
@@ -76,20 +78,23 @@ sudo ufw reload
 
 ## 3. Architecture
 
-### 4-Node Distributed Deployment
+### 4-Node Distributed Cluster (Same Protocol)
+
+All 4 nodes run the same consensus protocol and work together:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    LSCC Blockchain Cluster                               │
+│                    (All nodes run same protocol)                         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │  ┌─────────────────┐    ┌─────────────────┐                            │
 │  │   Node 1        │    │   Node 2        │                            │
 │  │ 192.168.50.147  │◄──►│ 192.168.50.148  │                            │
 │  │ Role: Bootstrap │    │ Role: Validator │                            │
-│  │ Protocol: PoW   │    │ Protocol: PoS   │                            │
-│  │ API: 5001       │    │ API: 5002       │                            │
-│  │ P2P: 9001       │    │ P2P: 9002       │                            │
+│  │ Protocol: LSCC  │    │ Protocol: LSCC  │                            │
+│  │ API: 5000       │    │ API: 5000       │                            │
+│  │ P2P: 9000       │    │ P2P: 9000       │                            │
 │  └────────┬────────┘    └────────┬────────┘                            │
 │           │                      │                                      │
 │           └──────────┬───────────┘                                      │
@@ -100,22 +105,22 @@ sudo ufw reload
 │  │   Node 3        │    │   Node 4        │                            │
 │  │ 192.168.50.149  │◄──►│ 192.168.50.150  │                            │
 │  │ Role: Validator │    │ Role: Validator │                            │
-│  │ Protocol: PBFT  │    │ Protocol: LSCC  │                            │
-│  │ API: 5003       │    │ API: 5004       │                            │
-│  │ P2P: 9003       │    │ P2P: 9004       │                            │
+│  │ Protocol: LSCC  │    │ Protocol: LSCC  │                            │
+│  │ API: 5000       │    │ API: 5000       │                            │
+│  │ P2P: 9000       │    │ P2P: 9000       │                            │
 │  └─────────────────┘    └─────────────────┘                            │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Port Assignments
+### Node Assignments
 
-| Server | IP Address | Primary Protocol | API Port | P2P Port |
-|--------|------------|------------------|----------|----------|
-| Node 1 | 192.168.50.147 | PoW (Bootstrap) | 5001 | 9001 |
-| Node 2 | 192.168.50.148 | PoS | 5002 | 9002 |
-| Node 3 | 192.168.50.149 | PBFT | 5003 | 9003 |
-| Node 4 | 192.168.50.150 | LSCC | 5004 | 9004 |
+| Server | IP Address | Role | API Port | P2P Port |
+|--------|------------|------|----------|----------|
+| Node 1 | 192.168.50.147 | Bootstrap | 5000 | 9000 |
+| Node 2 | 192.168.50.148 | Validator | 5000 | 9000 |
+| Node 3 | 192.168.50.149 | Validator | 5000 | 9000 |
+| Node 4 | 192.168.50.150 | Validator | 5000 | 9000 |
 
 ---
 
@@ -123,156 +128,323 @@ sudo ufw reload
 
 ### Step 1: Build the Binary
 
-On your development machine:
-
 ```bash
 # Clone the repository
 git clone https://github.com/yvivekan79/Blockchain.git
 cd Blockchain
 
-# Build for Linux (binary must be named lscc.exe for deployment script)
+# Build for Linux
 GOOS=linux GOARCH=amd64 go build -o lscc.exe main.go
 ```
 
-### Step 2: Deploy Using Script
+### Step 2: Deploy to All Nodes
 
 ```bash
-# Make deployment script executable
-chmod +x scripts/deployment/deploy-distributed.sh
-
-# Deploy to all 4 servers (deploys to /home/yvivekan on each server)
-./scripts/deployment/deploy-distributed.sh deploy
+# Deploy using script
+chmod +x scripts/deployment/deploy-4node-cluster.sh
+./scripts/deployment/deploy-4node-cluster.sh
 ```
 
 ### Step 3: Start the Cluster
 
 ```bash
-# Start all nodes (bootstrap first, then validators)
-./scripts/deployment/deploy-distributed.sh start
+# Start all nodes
+./scripts/deployment/start-4node-cluster.sh
 ```
 
-### Step 4: Verify Deployment
+### Step 4: Verify
 
 ```bash
-# Check status of all nodes
-./scripts/deployment/deploy-distributed.sh status
-
-# Test cross-protocol consensus
-./scripts/deployment/deploy-distributed.sh test
+# Check health of all nodes
+curl http://192.168.50.147:5000/health
+curl http://192.168.50.148:5000/health
+curl http://192.168.50.149:5000/health
+curl http://192.168.50.150:5000/health
 ```
 
 ---
 
-## 5. Detailed Configuration
+## 5. Configuration
 
-### Multi-Protocol Deployment (Recommended)
+### Node 1 Configuration (Bootstrap)
 
-Each node runs a different consensus protocol with cross-protocol coordination.
-
-#### Use Existing Configuration Files
-
-The repository includes pre-configured files for all 4 nodes:
-
-| Node | Config File | Primary Protocol | API Port | P2P Port |
-|------|-------------|------------------|----------|----------|
-| Node 1 | `config/node1-multi-algo.yaml` | PoW (Bootstrap) | 5001 | 9001 |
-| Node 2 | `config/node2-multi-algo.yaml` | PoS | 5002 | 9002 |
-| Node 3 | `config/node3-multi-algo.yaml` | PBFT | 5003 | 9003 |
-| Node 4 | `config/node4-multi-algo.yaml` | LSCC | 5004 | 9004 |
-
-#### Key Configuration Sections
-
-Each node configuration includes:
+Create `config/node1-lscc.yaml`:
 
 ```yaml
-# Node identification
+# Node 1 - Bootstrap Node
+# Server: 192.168.50.147
+
 node:
-  id: "node1-multi-algo"
-  consensus_algorithm: "lscc"  # Primary algorithm
-  role: "bootstrap"            # or "validator"
+  id: "lscc-node-1"
+  name: "LSCC Bootstrap Node"
+  consensus_algorithm: "lscc"
+  role: "bootstrap"
   external_ip: "192.168.50.147"
 
-# Algorithm-specific API servers
-servers:
-  pow:
-    port: 5001
-    algorithm: "pow"
-  pos:
-    port: 5002
-    algorithm: "pos"
-  pbft:
-    port: 5003
-    algorithm: "pbft"
-  lscc:
-    port: 5004
-    algorithm: "lscc"
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "production"
 
-# P2P network ports per algorithm
-network_ports:
-  pow: 9001
-  pos: 9002
-  pbft: 9003
-  lscc: 9004
+consensus:
+  algorithm: "lscc"
+  block_time: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 200000000
 
-# Cross-algorithm peer discovery
-algorithm_peers:
-  pow:
-    - "192.168.50.147:9001"
-    - "192.168.50.148:9001"
-    - "192.168.50.149:9001"
-    - "192.168.50.150:9001"
-  # ... (similar for pos, pbft, lscc)
-
-# Cross-protocol consensus (in node2-4 configs)
-cross_consensus:
-  enabled: true
-  threshold: 0.67  # 67% agreement required
-  algorithm_weights:
-    lscc: 0.30  # 30% weight (highest)
-    pos: 0.25   # 25% weight
-    pbft: 0.25  # 25% weight
-    pow: 0.20   # 20% weight
-  failover:
-    enabled: true
-    timeout: 10
-    max_retries: 3
-```
-
-#### Sharding Configuration (Same for All Nodes)
-
-```yaml
 sharding:
   num_shards: 4
   shard_size: 100
   cross_shard_delay: 100
   layered_structure: true
 
+network:
+  port: 9000
+  max_peers: 50
+  seeds:
+    - "192.168.50.148:9000"
+    - "192.168.50.149:9000"
+    - "192.168.50.150:9000"
+  boot_nodes:
+    - "192.168.50.147:9000"
+  external_ip: "192.168.50.147"
+  bind_address: "0.0.0.0"
+
+bootstrap:
+  enabled: true
+  advertise_address: "192.168.50.147:9000"
+
+storage:
+  data_dir: "./data"
+  cache_size: 200
+
+logging:
+  level: "info"
+  format: "json"
+```
+
+### Node 2 Configuration (Validator)
+
+Create `config/node2-lscc.yaml`:
+
+```yaml
+# Node 2 - Validator Node
+# Server: 192.168.50.148
+
+node:
+  id: "lscc-node-2"
+  name: "LSCC Validator Node 2"
+  consensus_algorithm: "lscc"
+  role: "validator"
+  external_ip: "192.168.50.148"
+
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "production"
+
 consensus:
-  algorithm: "lscc"  # or pow/pos/pbft per node
+  algorithm: "lscc"
   block_time: 1
   layer_depth: 3
   channel_count: 5
   gas_limit: 200000000
+
+sharding:
+  num_shards: 4
+  shard_size: 100
+  cross_shard_delay: 100
+  layered_structure: true
+
+network:
+  port: 9000
+  max_peers: 50
+  seeds:
+    - "192.168.50.147:9000"
+    - "192.168.50.149:9000"
+    - "192.168.50.150:9000"
+  boot_nodes:
+    - "192.168.50.147:9000"
+  external_ip: "192.168.50.148"
+  bind_address: "0.0.0.0"
+
+bootstrap:
+  enabled: false
+
+storage:
+  data_dir: "./data"
+  cache_size: 200
+
+logging:
+  level: "info"
+  format: "json"
+```
+
+### Node 3 Configuration (Validator)
+
+Create `config/node3-lscc.yaml`:
+
+```yaml
+# Node 3 - Validator Node
+# Server: 192.168.50.149
+
+node:
+  id: "lscc-node-3"
+  name: "LSCC Validator Node 3"
+  consensus_algorithm: "lscc"
+  role: "validator"
+  external_ip: "192.168.50.149"
+
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "production"
+
+consensus:
+  algorithm: "lscc"
+  block_time: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 200000000
+
+sharding:
+  num_shards: 4
+  shard_size: 100
+  cross_shard_delay: 100
+  layered_structure: true
+
+network:
+  port: 9000
+  max_peers: 50
+  seeds:
+    - "192.168.50.147:9000"
+    - "192.168.50.148:9000"
+    - "192.168.50.150:9000"
+  boot_nodes:
+    - "192.168.50.147:9000"
+  external_ip: "192.168.50.149"
+  bind_address: "0.0.0.0"
+
+bootstrap:
+  enabled: false
+
+storage:
+  data_dir: "./data"
+  cache_size: 200
+
+logging:
+  level: "info"
+  format: "json"
+```
+
+### Node 4 Configuration (Validator)
+
+Create `config/node4-lscc.yaml`:
+
+```yaml
+# Node 4 - Validator Node
+# Server: 192.168.50.150
+
+node:
+  id: "lscc-node-4"
+  name: "LSCC Validator Node 4"
+  consensus_algorithm: "lscc"
+  role: "validator"
+  external_ip: "192.168.50.150"
+
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "production"
+
+consensus:
+  algorithm: "lscc"
+  block_time: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 200000000
+
+sharding:
+  num_shards: 4
+  shard_size: 100
+  cross_shard_delay: 100
+  layered_structure: true
+
+network:
+  port: 9000
+  max_peers: 50
+  seeds:
+    - "192.168.50.147:9000"
+    - "192.168.50.148:9000"
+    - "192.168.50.149:9000"
+  boot_nodes:
+    - "192.168.50.147:9000"
+  external_ip: "192.168.50.150"
+  bind_address: "0.0.0.0"
+
+bootstrap:
+  enabled: false
+
+storage:
+  data_dir: "./data"
+  cache_size: 200
+
+logging:
+  level: "info"
+  format: "json"
 ```
 
 ---
 
-## 6. Deployment Scenarios
+### Running Other Protocols
 
-### Manual Deployment (Step-by-Step)
+To run a different protocol (PoW, PoS, or PBFT), change only the `consensus.algorithm` field in each config:
+
+#### For PoW Cluster:
+```yaml
+consensus:
+  algorithm: "pow"
+  difficulty: 4
+  block_time: 1
+```
+
+#### For PoS Cluster:
+```yaml
+consensus:
+  algorithm: "pos"
+  min_stake: 1000
+  stake_ratio: 0.1
+  block_time: 1
+```
+
+#### For PBFT Cluster:
+```yaml
+consensus:
+  algorithm: "pbft"
+  view_timeout: 5
+  byzantine: 1
+  block_time: 1
+```
+
+---
+
+## 6. Deployment
+
+### Manual Deployment
 
 #### On Each Server:
 
 ```bash
-# 1. Create application directory (matches deploy script)
+# 1. Create directory
 sudo mkdir -p /home/yvivekan
 cd /home/yvivekan
 
-# 2. Copy binary and config (from your dev machine)
-# scp lscc.exe user@server:/home/yvivekan/
-# scp config/nodeX-multi-algo.yaml user@server:/home/yvivekan/config.yaml
+# 2. Copy binary and config (from dev machine)
+# scp lscc.exe user@192.168.50.147:/home/yvivekan/
+# scp config/node1-lscc.yaml user@192.168.50.147:/home/yvivekan/config.yaml
 
-# 3. Make binary executable
+# 3. Make executable
 chmod +x lscc.exe
 
 # 4. Create systemd service
@@ -300,59 +472,35 @@ sudo systemctl daemon-reload
 sudo systemctl enable lscc-blockchain
 ```
 
-#### Start Order (Important!)
+### Start Order
 
-Always start the bootstrap node first:
+**Always start the bootstrap node (Node 1) first:**
 
 ```bash
 # 1. Start Node 1 (Bootstrap) - Wait 10 seconds
 ssh user@192.168.50.147 "sudo systemctl start lscc-blockchain"
 sleep 10
 
-# 2. Start Node 2 - Wait 5 seconds
+# 2. Start remaining nodes
 ssh user@192.168.50.148 "sudo systemctl start lscc-blockchain"
-sleep 5
-
-# 3. Start Node 3 - Wait 5 seconds
 ssh user@192.168.50.149 "sudo systemctl start lscc-blockchain"
-sleep 5
-
-# 4. Start Node 4
 ssh user@192.168.50.150 "sudo systemctl start lscc-blockchain"
-```
-
-### Automated Deployment
-
-Use the provided deployment script:
-
-```bash
-# Full deployment (copy files + create services + start)
-./scripts/deployment/deploy-distributed.sh deploy
-
-# Just start services
-./scripts/deployment/deploy-distributed.sh start
-
-# Stop all services
-./scripts/deployment/deploy-distributed.sh stop
-
-# Check status
-./scripts/deployment/deploy-distributed.sh status
 ```
 
 ---
 
 ## 7. Running the Nodes
 
-### Start/Stop Commands
+### Service Commands
 
 ```bash
-# Start a single node
+# Start
 sudo systemctl start lscc-blockchain
 
-# Stop a single node
+# Stop
 sudo systemctl stop lscc-blockchain
 
-# Restart a single node
+# Restart
 sudo systemctl restart lscc-blockchain
 
 # Check status
@@ -362,10 +510,9 @@ sudo systemctl status lscc-blockchain
 sudo journalctl -u lscc-blockchain -f
 ```
 
-### Running Manually (Development)
+### Manual Run (Development)
 
 ```bash
-# On each server
 ./lscc.exe --config=config.yaml
 ```
 
@@ -373,145 +520,92 @@ sudo journalctl -u lscc-blockchain -f
 
 ## 8. Testing & Verification
 
-### Verify Node Health
+### Health Check
 
 ```bash
-# Check each node's health
-curl http://192.168.50.147:5001/health
-curl http://192.168.50.148:5002/health
-curl http://192.168.50.149:5003/health
-curl http://192.168.50.150:5004/health
-```
-
-Expected response:
-```json
-{"status": "healthy", "node_id": "node-1"}
+# Check all nodes
+for ip in 147 148 149 150; do
+  echo "Node 192.168.50.$ip:"
+  curl -s http://192.168.50.$ip:5000/health
+  echo ""
+done
 ```
 
 ### Verify Peer Connections
 
 ```bash
-# Check peers on Node 1
-curl http://192.168.50.147:5001/api/v1/network/peers
-
-# Check peers on Node 4
-curl http://192.168.50.150:5004/api/v1/network/peers
+curl http://192.168.50.147:5000/api/v1/network/peers
 ```
+
+Expected: All 4 nodes should see 3 peers each.
 
 ### Verify Shards
 
 ```bash
-# Check shard status
-curl http://192.168.50.147:5001/api/v1/shards/
+curl http://192.168.50.147:5000/api/v1/shards/
 ```
 
-Expected response:
-```json
-{
-  "total_shards": 4,
-  "active_shards": 4,
-  "inactive_shards": 0,
-  "shards": [...]
-}
-```
+Expected: 4 active shards.
 
 ### Test Transaction Injection
 
 ```bash
 # Inject 50 test transactions
-curl -X POST http://192.168.50.150:5004/api/v1/transaction-injection/inject-batch \
+curl -X POST http://192.168.50.147:5000/api/v1/transaction-injection/inject-batch \
   -H "Content-Type: application/json" \
   -d '{"count": 50}'
 ```
 
-### Test Continuous Injection
+### Continuous Load Test
 
 ```bash
-# Start continuous injection at 25 TPS for 60 seconds
-curl -X POST http://192.168.50.150:5004/api/v1/transaction-injection/start-injection \
+# Start injection at 25 TPS for 60 seconds
+curl -X POST http://192.168.50.147:5000/api/v1/transaction-injection/start-injection \
   -H "Content-Type: application/json" \
   -d '{"tps": 25, "duration_seconds": 60}'
 
-# Check injection stats
-curl http://192.168.50.150:5004/api/v1/transaction-injection/injection-stats
+# Check stats
+curl http://192.168.50.147:5000/api/v1/transaction-injection/injection-stats
 
 # Stop injection
-curl -X POST http://192.168.50.150:5004/api/v1/transaction-injection/stop-injection
-```
-
-### Cross-Protocol Consensus Test
-
-```bash
-# Run convergence test across all protocols
-curl -X POST http://192.168.50.150:5004/api/v1/testing/convergence/all-protocols
+curl -X POST http://192.168.50.147:5000/api/v1/transaction-injection/stop-injection
 ```
 
 ---
 
 ## 9. Monitoring
 
-### Check Blockchain Status
+### Quick Status Script
 
 ```bash
-# Get blockchain info from any node
-curl http://192.168.50.147:5001/api/v1/blockchain/info
+#!/bin/bash
+echo "=== LSCC Cluster Status ==="
+for ip in 147 148 149 150; do
+  echo -n "Node 192.168.50.$ip: "
+  if curl -s http://192.168.50.$ip:5000/health > /dev/null 2>&1; then
+    echo "HEALTHY"
+  else
+    echo "UNREACHABLE"
+  fi
+done
+```
+
+### Check Blockchain Info
+
+```bash
+curl http://192.168.50.147:5000/api/v1/blockchain/info
 ```
 
 ### Check Transaction Stats
 
 ```bash
-# Get transaction statistics
-curl http://192.168.50.150:5004/api/v1/transactions/stats
-```
-
-### Check Consensus Status
-
-```bash
-# Get consensus status
-curl http://192.168.50.150:5004/api/v1/consensus/status
+curl http://192.168.50.147:5000/api/v1/transactions/stats
 ```
 
 ### Prometheus Metrics
 
 ```bash
-# Get Prometheus metrics
-curl http://192.168.50.147:5001/metrics
-```
-
-### Quick Monitoring Script
-
-Create `monitor.sh`:
-
-```bash
-#!/bin/bash
-
-NODES=("192.168.50.147:5001" "192.168.50.148:5002" "192.168.50.149:5003" "192.168.50.150:5004")
-
-echo "=== LSCC Blockchain Cluster Status ==="
-echo ""
-
-for node in "${NODES[@]}"; do
-    echo "Node: $node"
-    
-    # Health check
-    health=$(curl -s http://$node/health 2>/dev/null)
-    if [ $? -eq 0 ]; then
-        echo "  Health: OK"
-    else
-        echo "  Health: FAILED"
-        continue
-    fi
-    
-    # Get blockchain info
-    info=$(curl -s http://$node/api/v1/blockchain/info 2>/dev/null)
-    echo "  Blockchain: $info"
-    
-    # Get shard count
-    shards=$(curl -s http://$node/api/v1/shards/ 2>/dev/null | grep -o '"active_shards":[0-9]*' | cut -d: -f2)
-    echo "  Active Shards: $shards"
-    
-    echo ""
-done
+curl http://192.168.50.147:5000/metrics
 ```
 
 ---
@@ -524,108 +618,58 @@ done
 # Check logs
 sudo journalctl -u lscc-blockchain -n 100
 
-# Check if port is in use
-sudo netstat -tlnp | grep 5001
-sudo netstat -tlnp | grep 9001
-
-# Kill existing process if needed
-sudo pkill -f lscc-blockchain
+# Check port conflicts
+sudo netstat -tlnp | grep 5000
+sudo netstat -tlnp | grep 9000
 ```
 
 ### Nodes Not Connecting
 
-1. Verify firewall rules:
+1. Verify firewall:
 ```bash
 sudo ufw status
-sudo ufw allow 5001:5004/tcp
-sudo ufw allow 9001:9004/tcp
 ```
 
-2. Check network connectivity:
+2. Check bootstrap is running first:
 ```bash
-ping 192.168.50.147
-telnet 192.168.50.147 9001
+curl http://192.168.50.147:5000/health
 ```
 
-3. Verify bootstrap node is running first:
+3. Verify network connectivity:
 ```bash
-curl http://192.168.50.147:5001/health
+telnet 192.168.50.147 9000
 ```
 
-### Low TPS Performance
-
-1. Check gas limit in config:
-```yaml
-consensus:
-  gas_limit: 200000000  # Should be high
-```
-
-2. Check shard count:
-```yaml
-sharding:
-  num_shards: 4
-```
-
-3. Verify all shards are active:
-```bash
-curl http://localhost:5001/api/v1/shards/
-```
-
-### Database Issues
+### Reset Data
 
 ```bash
-# Clear data directory and restart
 sudo systemctl stop lscc-blockchain
-rm -rf /opt/lscc-blockchain/data/*
+rm -rf /home/yvivekan/data/*
 sudo systemctl start lscc-blockchain
-```
-
-### Log Levels
-
-To increase log verbosity, edit config:
-
-```yaml
-logging:
-  level: "debug"  # Change from "info" to "debug"
 ```
 
 ---
 
 ## Quick Reference
 
-### API Endpoints Summary
+### API Endpoints
 
 | Endpoint | Description |
 |----------|-------------|
-| GET /health | Node health check |
+| GET /health | Node health |
 | GET /api/v1/blockchain/info | Blockchain status |
 | GET /api/v1/shards/ | Shard status |
 | GET /api/v1/network/peers | Connected peers |
-| POST /api/v1/transaction-injection/inject-batch | Inject test transactions |
-| GET /api/v1/consensus/status | Consensus state |
+| POST /api/v1/transaction-injection/inject-batch | Inject transactions |
 
-### Configuration Summary (Multi-Protocol Mode)
+### Protocol Configuration
 
-| Setting | Value |
-|---------|-------|
-| consensus.algorithm | varies per node (pow/pos/pbft/lscc) |
-| sharding.num_shards | 4 |
-| API ports | 5001-5004 |
-| P2P ports | 9001-9004 |
-| cross_consensus.enabled | true |
-| cross_consensus.threshold | 0.67 (67% agreement) |
-
-### Deployment Checklist
-
-- [ ] Build binary for Linux
-- [ ] Configure firewall on all nodes
-- [ ] Copy binary and config to each node
-- [ ] Create systemd service
-- [ ] Start bootstrap node first
-- [ ] Start validator nodes
-- [ ] Verify health endpoints
-- [ ] Verify peer connections
-- [ ] Test transaction injection
+| Protocol | Key Config |
+|----------|------------|
+| LSCC | `algorithm: "lscc"`, `layer_depth: 3`, `channel_count: 5` |
+| PoW | `algorithm: "pow"`, `difficulty: 4` |
+| PoS | `algorithm: "pos"`, `min_stake: 1000` |
+| PBFT | `algorithm: "pbft"`, `view_timeout: 5` |
 
 ---
 

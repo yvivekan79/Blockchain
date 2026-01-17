@@ -1,0 +1,68 @@
+# Node 4 - Validator Node (LSCC Cluster)
+# Server: 192.168.50.150
+
+node:
+  id: "lscc-node-4"
+  name: "LSCC Validator Node 4"
+  consensus_algorithm: "lscc"
+  role: "validator"
+  external_ip: "192.168.50.150"
+
+server:
+  port: 5000
+  host: "0.0.0.0"
+  mode: "production"
+
+consensus:
+  algorithm: "lscc"
+  block_time: 1
+  layer_depth: 3
+  channel_count: 5
+  gas_limit: 200000000
+  difficulty: 4
+  min_stake: 1000
+  stake_ratio: 0.1
+  view_timeout: 5
+  byzantine: 1
+
+sharding:
+  num_shards: 4
+  shard_size: 100
+  cross_shard_delay: 100
+  rebalance_threshold: 0.7
+  layered_structure: true
+
+network:
+  port: 9000
+  max_peers: 50
+  seeds:
+    - "192.168.50.147:9000"
+    - "192.168.50.148:9000"
+    - "192.168.50.149:9000"
+  boot_nodes:
+    - "192.168.50.147:9000"
+  external_ip: "192.168.50.150"
+  bind_address: "0.0.0.0"
+  timeout: 30
+  keep_alive: 60
+
+bootstrap:
+  enabled: false
+  advertise_address: "192.168.50.150:9000"
+
+storage:
+  data_dir: "./data"
+  cache_size: 200
+  compact: true
+  encryption: false
+
+security:
+  jwt_secret: "lscc-cluster-secret-2026"
+  tls_enabled: false
+  rate_limit: 1000
+  max_connections: 2000
+
+logging:
+  level: "info"
+  format: "json"
+  output: "stdout"
