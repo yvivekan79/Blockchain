@@ -15,20 +15,6 @@ This project includes comprehensive documentation designed for different audienc
 - Security analysis and Byzantine fault tolerance proofs
 - Comparative analysis against PoW, PoS, and PBFT
 
-## 🎓 Academic Materials (`academic/`)
-
-**Testing Framework**: [academic/ACADEMIC_TESTING_FRAMEWORK.md](./academic/ACADEMIC_TESTING_FRAMEWORK.md)
-- 15 specialized API endpoints for peer-review validation
-- Byzantine fault injection system with 6 attack scenarios
-- Distributed multi-region testing capabilities
-- Statistical analysis suite with reproducible results
-
-**Defense Preparation**: [academic/THESIS_DEFENSE_PREPARATION_GUIDE.md](./academic/THESIS_DEFENSE_PREPARATION_GUIDE.md)
-- Complete defense strategy with key metrics
-- Mathematical foundations and whiteboard explanations
-- Security proofs and attack resistance validation
-- Implementation details and architectural deep-dive
-
 ## ⚙️ Technical Documentation (`technical/`)
 
 **System Architecture**: [technical/TECHNICAL_ARCHITECTURE_GUIDE.md](./technical/TECHNICAL_ARCHITECTURE_GUIDE.md)
@@ -210,7 +196,6 @@ All documentation references live performance results from the running system:
 ### Current Organization (January 2026)
 ```
 docs/
-├── academic/           # Academic and research materials
 ├── guides/             # Implementation and deployment guides
 ├── operations/         # Operations and performance documentation
 ├── research/           # Research papers and analysis

@@ -5,10 +5,6 @@
 ### 🔬 Research Papers (`research/`)
 - **LSCC_RESEARCH_PAPER.md** - Core research paper with academic analysis and performance validation
 
-### 🎓 Academic Materials (`academic/`)
-- **ACADEMIC_TESTING_FRAMEWORK.md** - Peer-review validation framework
-- **THESIS_DEFENSE_PREPARATION_GUIDE.md** - Complete defense preparation guide
-
 ### ⚙️ Technical Documentation (`technical/`)
 - **TECHNICAL_ARCHITECTURE_GUIDE.md** - System architecture and component design
 - **API_SPECIFICATIONS.md** - Complete REST API and WebSocket documentation
