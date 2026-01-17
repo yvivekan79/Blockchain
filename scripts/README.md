@@ -9,14 +9,9 @@ Scripts for deploying and managing blockchain clusters:
 
 | Script | Description |
 |--------|-------------|
-| `deploy-4node-cluster.sh` | Deploy 4-node LSCC cluster |
-| `deploy-4node-distributed.sh` | Deploy distributed 4-node setup |
-| `deploy-distributed.sh` | General distributed deployment |
-| `deploy-multi-node.sh` | Deploy multi-node setup |
-| `start-4node-cluster.sh` | Start 4-node cluster |
-| `start-distributed-nodes.sh` | Start distributed nodes |
-| `start-injection.sh` | Start transaction injection |
-| `stop-distributed-nodes.sh` | Stop distributed nodes |
+| `deploy-lscc-cluster.sh` | Deploy 4-node LSCC cluster to servers |
+| `start-injection.sh` | Start transaction injection for testing |
+| `stop-distributed-nodes.sh` | Stop all blockchain nodes |
 
 ### `/testing`
 Scripts for testing and benchmarking:
@@ -39,6 +34,7 @@ Scripts for monitoring:
 | `quick-monitor.sh` | Quick system monitoring |
 
 ### Root Level
+
 | Script | Description |
 |--------|-------------|
 | `install_go.sh` | Install Go dependencies |
@@ -52,30 +48,36 @@ Scripts for monitoring:
 go build -o lscc.exe main.go
 
 # Deploy to all 4 servers
-./scripts/deployment/deploy-4node-cluster.sh
+./scripts/deployment/deploy-lscc-cluster.sh deploy
 
 # Start the cluster
-./scripts/deployment/start-4node-cluster.sh
+./scripts/deployment/deploy-lscc-cluster.sh start
+
+# Check status
+./scripts/deployment/deploy-lscc-cluster.sh status
+
+# Stop cluster
+./scripts/deployment/deploy-lscc-cluster.sh stop
+```
+
+### Test Transaction Injection
+
+```bash
+# Start injection (50 TPS for 120 seconds)
+./scripts/deployment/start-injection.sh 192.168.50.147 50 120
 ```
 
 ### Run Tests
 
 ```bash
-# Execute academic test suite
 ./scripts/testing/execute-academic-tests.sh
-
-# Verify results
 ./scripts/testing/verify-test-results.sh
 ```
 
 ### Monitor
 
 ```bash
-# Quick status check
 ./scripts/monitoring/quick-monitor.sh
-
-# Monitor transaction injection
-./scripts/monitoring/monitor-injection.sh
 ```
 
 ## Requirements
@@ -84,8 +86,11 @@ go build -o lscc.exe main.go
 - SSH access to target servers (192.168.50.147-150)
 - Open ports: 5000 (API), 9000 (P2P)
 
-## Usage
+## Server Configuration
 
-1. Make scripts executable: `chmod +x scripts/**/*.sh`
-2. Run from project root directory
-3. Ensure network connectivity to target servers
+| Node | IP | Role |
+|------|-----|------|
+| Node 1 | 192.168.50.147 | Bootstrap |
+| Node 2 | 192.168.50.148 | Validator |
+| Node 3 | 192.168.50.149 | Validator |
+| Node 4 | 192.168.50.150 | Validator |
